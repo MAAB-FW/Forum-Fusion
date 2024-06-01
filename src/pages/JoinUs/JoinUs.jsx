@@ -1,9 +1,35 @@
 import React from "react"
 import logo from "/F.Fusion.png"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { SocialLogin } from "../Shared/SocialLogin/SocialLogin"
+import { useForm } from "react-hook-form"
+import useAuth from "@/hooks/useAuth"
+import toast from "react-hot-toast"
 
 const JoinUs = () => {
+    const { joinUsUser } = useAuth()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || "/"
+    const navigate = useNavigate()
+    
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm()
+
+    const onSubmit = (data) => {
+        joinUsUser(data.email, data.password)
+            .then((r) => {
+                console.log(r.user)
+                toast.success("Successfully Logged In!")
+                navigate(from)
+            })
+            .catch((e) => {
+                console.log(e)
+            })
+    }
+
     return (
         <div className="flex items-center justify-center my-20">
             <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
@@ -11,35 +37,51 @@ const JoinUs = () => {
                     <img src={logo} alt="Logo" className="h-12 w-12" />
                 </div>
                 <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">Join With Us</h2>
-                <form className="mt-8 space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
                     <div className="rounded-md shadow-sm">
                         <div>
-                            <label htmlFor="email-address" className="sr-only">
+                            <label htmlFor="email" className="sr-only">
                                 Email address
                             </label>
                             <input
-                                id="email-address"
+                                {...register("email", {
+                                    required: { value: true, message: "This field is required" },
+                                    pattern: {
+                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                        message: "Invalid email address",
+                                    },
+                                })}
+                                id="email"
                                 name="email"
                                 type="email"
                                 autoComplete="email"
-                                required
                                 className="relative block w-full px-3 py-2 border border-gray-300 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 placeholder="Email address"
                             />
+                            {errors.email && <span className="text-red-600 text-sm font-semibold">{errors.email.message}</span>}
                         </div>
                         <div>
                             <label htmlFor="password" className="sr-only">
                                 Password
                             </label>
                             <input
+                                {...register("password", {
+                                    required: { value: true, message: "This field is required" },
+                                    pattern: {
+                                        value: /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/,
+                                        message: "Password needs 1 uppercase, 1 lowercase, min. 6 chars.",
+                                    },
+                                })}
                                 id="password"
                                 name="password"
                                 type="password"
                                 autoComplete="current-password"
-                                required
                                 className="relative block w-full px-3 py-2 border border-gray-300 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 placeholder="Password"
                             />
+                            {errors.password && (
+                                <span className="text-red-600 text-sm font-semibold">{errors.password.message}</span>
+                            )}
                         </div>
                     </div>
                     <div className="flex items-center justify-between">

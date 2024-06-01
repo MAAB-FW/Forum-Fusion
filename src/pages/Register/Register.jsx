@@ -1,11 +1,55 @@
 import React from "react"
 import logo from "/F.Fusion.png"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import useAuth from "@/hooks/useAuth"
 import { SocialLogin } from "../Shared/SocialLogin/SocialLogin"
+import { useForm } from "react-hook-form"
+import { ImageUpload } from "@/utils/ImageUpload"
+import toast from "react-hot-toast"
 
 const Register = () => {
-    const {} = useAuth()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || "/"
+    const navigate = useNavigate()
+    const { registerUser, updateUser } = useAuth()
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm()
+
+    const onSubmit = async (data) => {
+        console.log(data)
+        const userName = data.userName
+        const email = data.email
+        const password = data.password
+        const image = data.image[0]
+        const imageUrl = await ImageUpload(image)
+        if (imageUrl) {
+            const userInfo = { userName, email, imageUrl }
+            registerUser(email, password)
+                .then((r) => {
+                    console.log(r.user)
+                    toast.success("Successfully Registered!")
+                    if (r.user) {
+                        updateUser(userName, imageUrl)
+                            .then(() => {
+                                console.log("profile info updated")
+                                navigate(from)
+                            })
+                            .catch((e) => {
+                                console.log(e)
+                                toast.error("Something went wrong!")
+                            })
+                    }
+                })
+                .catch((e) => {
+                    console.log(e)
+                    toast.error("Something went wrong!")
+                })
+        }
+    }
+
     return (
         <div className="flex items-center justify-center my-20">
             <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
@@ -13,62 +57,87 @@ const Register = () => {
                     <img src={logo} alt="Logo" className="h-12 w-12" />
                 </div>
                 <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">Register Account</h2>
-                <form className="mt-8 space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
                     <div className="rounded-md shadow-sm">
                         <div>
-                            <label htmlFor="user-name" className="sr-only">
-                                Email address
+                            <label htmlFor="userName" className="sr-only">
+                                User Name
                             </label>
                             <input
-                                id="user-name"
+                                {...register("userName", {
+                                    required: { value: true, message: "This field is required" },
+                                })}
+                                id="userName"
                                 name="userName"
-                                type="userName"
+                                type="text"
                                 autoComplete="userName"
-                                required
                                 className="relative block w-full px-3 py-2 border border-gray-300 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 placeholder="User Name"
                             />
+                            {errors.userName && (
+                                <span className="text-red-600 text-sm font-semibold">{errors.userName.message}</span>
+                            )}
                         </div>
                         <div>
-                            <label htmlFor="email-address" className="sr-only">
+                            <label htmlFor="email" className="sr-only">
                                 Email address
                             </label>
                             <input
-                                id="email-address"
+                                {...register("email", {
+                                    required: { value: true, message: "This field is required" },
+                                    pattern: {
+                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                        message: "Invalid email address",
+                                    },
+                                })}
+                                id="email"
                                 name="email"
                                 type="email"
                                 autoComplete="email"
-                                required
                                 className="relative block w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 placeholder="Email address"
                             />
+                            {errors.email && <span className="text-red-600 text-sm font-semibold">{errors.email.message}</span>}
                         </div>
                         <div>
                             <label htmlFor="password" className="sr-only">
                                 Password
                             </label>
                             <input
+                                {...register("password", {
+                                    required: { value: true, message: "This field is required" },
+                                    pattern: {
+                                        value: /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/,
+                                        message: "Password needs 1 uppercase, 1 lowercase, min. 6 chars.",
+                                    },
+                                })}
                                 id="password"
                                 name="password"
                                 type="password"
                                 autoComplete="current-password"
-                                required
                                 className="relative block w-full px-3 py-2 border border-gray-300 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 placeholder="Password"
                             />
+                            {errors.password && (
+                                <span className="text-red-600 text-sm font-semibold">{errors.password.message}</span>
+                            )}
                         </div>
                         <div className="">
                             <label htmlFor="image-upload" className="text-sm text-gray-500">
                                 Upload Photo:
                             </label>
                             <input
-                                id="image-upload"
-                                name="image-upload"
+                                {...register("image", {
+                                    required: { value: true, message: "This field is required" },
+                                })}
+                                id="image"
+                                name="image"
                                 type="file"
                                 accept="image/*"
                                 className="relative block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 placeholder="Upload Image"
                             />
+                            {errors.image && <span className="text-red-600 text-sm font-semibold">{errors.image.message}</span>}
                         </div>
                     </div>
                     <div className="flex items-center justify-between">
