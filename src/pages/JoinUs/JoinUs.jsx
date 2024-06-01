@@ -70,7 +70,7 @@ const JoinUs = () => {
                     </div>
                     <div className="flex items-center justify-between">
                         <div className="w-1/3 border-b border-gray-300"></div>
-                        <div className="px-2 text-sm text-gray-600 text-nowrap">or continue with</div>
+                        <div className="px-2 text-sm text-gray-600 text-nowrap">or, continue with</div>
                         <div className="w-1/3 border-b border-gray-300"></div>
                     </div>
                     <div className="">
@@ -79,7 +79,7 @@ const JoinUs = () => {
                                 type="button"
                                 className="inline-flex items-center gap-4 justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
                             >
-                                <FcGoogle className="text-xl"/> Google
+                                <FcGoogle className="text-xl" /> Google
                             </button>
                         </div>
                     </div>

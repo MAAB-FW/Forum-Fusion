@@ -4,6 +4,7 @@ import Home from "@/pages/Home/Home/Home"
 import Membership from "@/pages/Membership/Membership"
 import JoinUs from "@/pages/JoinUs/JoinUs"
 import Dashboard from "@/layout/Dashboard"
+import Register from "@/pages/Register/Register"
 
 export const router = createBrowserRouter([
     {
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
             {
                 path: "/joinUs",
                 element: <JoinUs></JoinUs>,
+            },
+            {
+                path: "/register",
+                element: <Register></Register>,
             },
         ],
     },
