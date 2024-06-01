@@ -53,7 +53,7 @@ const AuthProvider = ({ children }) => {
         }
     }, [])
 
-    const authInfo = { user, loading, registerUser, updateUser, logoutUser, joinUsUser }
+    const authInfo = { user, loading, registerUser, updateUser, logoutUser, joinUsUser, setUser }
     if (firstLoad) {
         return <LoadingSpinner></LoadingSpinner>
     }

@@ -20,17 +20,15 @@ const Navbar = () => {
     const handleLogout = () => {
         logoutUser()
             .then(() => {
-                console.log("done")
                 toast.success("Successfully logged out!")
             })
             .catch(() => {
-                console.log("error logout")
                 toast.error("Something went wrong!")
             })
     }
 
     return (
-        <nav className="bg-white py-2.5 shadow-xl ">
+        <nav className="bg-white py-2.5 h-14 flex items-center justify-center shadow-xl ">
             <div className="flex items-center justify-between mx-auto md:w-[85%] w-[90%] max-w-7xl">
                 <Link to="/" className="hidden md:flex items-center">
                     <img src={logo} className="h-6 mr-3 sm:h-9 object-cover" alt="Logo" />
@@ -46,7 +44,7 @@ const Navbar = () => {
                         <DropdownMenuItem className="p-0">
                             <NavLink
                                 to="/"
-                                className="w-full px-2 py-1 hover:text-purple-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                                className="w-full px-2 py-1.5 hover:text-purple-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                             >
                                 Home
                             </NavLink>
@@ -54,7 +52,7 @@ const Navbar = () => {
                         <DropdownMenuItem className="p-0">
                             <NavLink
                                 to="/membership"
-                                className="w-full px-2 py-1 hover:text-purple-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                                className="w-full px-2 py-1.5 hover:text-purple-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                             >
                                 Membership
                             </NavLink>
@@ -99,11 +97,15 @@ const Navbar = () => {
                             <DropdownMenuContent>
                                 <DropdownMenuLabel>{user.displayName}</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>
-                                    <Link to="/dashboard">DashBoard</Link>
+                                <DropdownMenuItem className="p-0">
+                                    <Link className="px-2 py-1.5 w-full" to="/dashboard">
+                                        DashBoard
+                                    </Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <button onClick={handleLogout}>logout</button>
+                                <DropdownMenuItem className="p-0">
+                                    <button className="px-2 py-1.5 w-full text-left" onClick={handleLogout}>
+                                        logout
+                                    </button>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>

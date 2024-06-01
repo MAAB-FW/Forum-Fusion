@@ -6,7 +6,7 @@ function App() {
     return (
         <>
             <Navbar></Navbar>
-            <div className="max-w-7xl md:w-[85%] w-[90%]  mx-auto">
+            <div className="max-w-7xl md:w-[85%] w-[90%] h-screen mx-auto">
                 <Outlet></Outlet>
             </div>
             <Footer></Footer>

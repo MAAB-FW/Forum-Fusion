@@ -11,7 +11,7 @@ const Register = () => {
     const location = useLocation()
     const from = location.state?.from?.pathname || "/"
     const navigate = useNavigate()
-    const { registerUser, updateUser } = useAuth()
+    const { registerUser, updateUser, setUser } = useAuth()
     const {
         register,
         handleSubmit,
@@ -34,8 +34,9 @@ const Register = () => {
                     if (r.user) {
                         updateUser(userName, imageUrl)
                             .then(() => {
+                                setUser({ displayName: userName, photoURL: imageUrl })
                                 console.log("profile info updated")
-                                navigate(from)
+                                navigate(from, { replace: true })
                             })
                             .catch((e) => {
                                 console.log(e)

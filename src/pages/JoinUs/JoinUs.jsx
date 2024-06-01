@@ -11,7 +11,7 @@ const JoinUs = () => {
     const location = useLocation()
     const from = location.state?.from?.pathname || "/"
     const navigate = useNavigate()
-    
+
     const {
         register,
         handleSubmit,
@@ -23,7 +23,7 @@ const JoinUs = () => {
             .then((r) => {
                 console.log(r.user)
                 toast.success("Successfully Logged In!")
-                navigate(from)
+                navigate(from, { replace: true })
             })
             .catch((e) => {
                 console.log(e)
