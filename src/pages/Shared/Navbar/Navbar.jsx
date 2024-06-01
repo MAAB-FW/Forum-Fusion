@@ -13,8 +13,8 @@ import { MdMenuOpen } from "react-icons/md"
 import { MdNotifications } from "react-icons/md"
 
 const Navbar = () => (
-    <nav className="bg-white py-2.5 px-7 shadow-xl ">
-        <div className="flex items-center justify-between mx-auto max-w-7xl">
+    <nav className="bg-white py-2.5 shadow-xl ">
+        <div className="flex items-center justify-between mx-auto md:w-[85%] w-[90%] max-w-7xl">
             <Link to="/" className="hidden md:flex items-center">
                 <img src={logo} className="h-6 mr-3 sm:h-9 object-cover" alt="Logo" />
                 <span className="hidden md:flex text-xl font-semibold  dark:text-white whitespace-nowrap">Forum Fusion</span>
@@ -66,12 +66,9 @@ const Navbar = () => (
                 </ul>
             </div>
             <div className="flex items-center gap-3 lg:order-2">
-                {/* <div className="hidden mt-2 mr-4 sm:inline-block">
-                    <span></span>
-                </div> */}
-                <MdNotifications className="text-3xl"></MdNotifications>
+                <MdNotifications className="text-3xl hover:text-purple-700 cursor-pointer"></MdNotifications>
                 <Button>
-                    <Link to='/joinUs'>Join Us</Link>
+                    <Link to="/joinUs">Join Us</Link>
                 </Button>
                 <DropdownMenu>
                     <DropdownMenuTrigger className="size-8 rounded-full">
@@ -84,7 +81,9 @@ const Navbar = () => (
                     <DropdownMenuContent>
                         <DropdownMenuLabel>User Name</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>DashBoard</DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Link to="/dashboard">DashBoard</Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Logout</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
