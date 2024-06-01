@@ -1,9 +1,11 @@
 import React from "react"
 import logo from "/F.Fusion.png"
-import { FcGoogle } from "react-icons/fc"
 import { Link } from "react-router-dom"
+import useAuth from "@/hooks/useAuth"
+import { SocialLogin } from "../Shared/SocialLogin/SocialLogin"
 
 const Register = () => {
+    const {} = useAuth()
     return (
         <div className="flex items-center justify-center my-20">
             <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
@@ -101,14 +103,7 @@ const Register = () => {
                         <div className="w-1/3 border-b border-gray-300"></div>
                     </div>
                     <div className="">
-                        <div>
-                            <button
-                                type="button"
-                                className="inline-flex items-center gap-4 justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
-                            >
-                                <FcGoogle className="text-xl" /> Google
-                            </button>
-                        </div>
+                        <SocialLogin></SocialLogin>
                     </div>
                     <div className="text-sm text-center">
                         Already a member?{" "}
