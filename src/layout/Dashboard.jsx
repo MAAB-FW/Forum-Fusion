@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react"
+import { ScrollRestoration } from "react-router-dom"
 
 const Dashboard = () => {
-  return (
-    <div>Dashboard</div>
-  )
+    return (
+        <div>
+            Dashboard
+            <ScrollRestoration />
+        </div>
+    )
 }
 
 export default Dashboard

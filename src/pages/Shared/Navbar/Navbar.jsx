@@ -67,8 +67,10 @@ const Navbar = () => (
             </div>
             <div className="flex items-center gap-3 lg:order-2">
                 <MdNotifications className="text-3xl hover:text-purple-700 cursor-pointer"></MdNotifications>
-                <Button>
-                    <Link to="/joinUs">Join Us</Link>
+                <Button className="p-0">
+                    <Link className="py-2 px-4" to="/joinUs">
+                        Join Us
+                    </Link>
                 </Button>
                 <DropdownMenu>
                     <DropdownMenuTrigger className="size-8 rounded-full">
