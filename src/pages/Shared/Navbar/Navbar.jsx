@@ -81,7 +81,11 @@ const Navbar = () => {
                     </ul>
                 </div>
                 <div className="flex items-center gap-3 lg:order-2">
-                    <MdNotifications className="text-3xl hover:text-purple-700 cursor-pointer"></MdNotifications>
+                    <div className="relative">
+                        {/* TODO: Dynamic this */}
+                        {<span className="absolute text-white text-xs bg-red-600 px-1 rounded-2xl -right-1 -top-1">4</span>}
+                        <MdNotifications className="text-3xl hover:text-purple-700 cursor-pointer"></MdNotifications>
+                    </div>
                     {!user ? (
                         <Button className="p-0">
                             <Link className="py-2 px-4" to="/joinUs">
