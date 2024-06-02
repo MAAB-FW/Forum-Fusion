@@ -2,7 +2,7 @@ import React from "react"
 
 const Banner = () => {
     return (
-        <div className="md:-ml-[9%] md:-mr-[9%] -ml-[6%] -mr-[6%] relative overflow-hidden">
+        <div className="md:-ml-[8.8%] md:-mr-[8.8%] -ml-[5.5%] -mr-[5.5%] relative overflow-hidden">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
                     <path
@@ -41,10 +41,9 @@ const Banner = () => {
                         </label>
                         <div className="mt-2">
                             Popular Topics:{" "}
-                            <span>
-                                <button className="text-blue-500">Helpdesk</button>,{" "}
-                                <button className="text-blue-500">Introduction</button>,{" "}
-                                <button className="text-blue-500">Payment</button>
+                            <span className="*:text-blue-500 *:bg-[#f3ebfe] *:rounded-xl *:px-2 *:my-1">
+                                <button className="">Helpdesk</button>, <button className="">Introduction</button>,{" "}
+                                <button className="">Payment</button>
                             </span>
                         </div>
                     </form>
