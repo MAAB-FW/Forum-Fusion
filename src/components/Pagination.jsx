@@ -51,7 +51,7 @@ const Pagination = () => {
                                 onClick={() => setCurrentPage(page)}
                                 aria-current="page"
                                 className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0 
-                        ${currentPage === page ? "text-white bg-indigo-600" : "hover:bg-gray-50"}`}
+                        ${currentPage === page ? "text-white bg-[#7e22ce]" : "hover:bg-gray-200"}`}
                             >
                                 {page + 1}
                             </button>

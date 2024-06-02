@@ -27,7 +27,7 @@ const SinglePost = () => {
                 <div className="text-gray-600 flex flex-wrap gap-1">
                     {tags.map((tag, id) => (
                         <div key={id}>
-                            <span className="bg-sky-600 bg-opacity-15 rounded px-2">#{tag}</span>{" "}
+                            <span className="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-2.5 py-0.5 rounded">#{tag}</span>{" "}
                         </div>
                     ))}
                 </div>
