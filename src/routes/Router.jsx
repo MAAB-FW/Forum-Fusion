@@ -7,11 +7,16 @@ import Dashboard from "@/layout/Dashboard"
 import Register from "@/pages/Register/Register"
 import PrivateRoute from "./PrivateRoute"
 import PostDetails from "@/pages/PostDetails/PostDetails"
+import MyProfile from "@/pages/DashboardPages/MyProfile/MyProfile"
+import AddPost from "@/pages/DashboardPages/AddPost/AddPost"
+import MyPosts from "@/pages/DashboardPages/MyPosts/MyPosts"
+import ErrorPage from "@/layout/ErrorPage"
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <App></App>,
+        errorElement: <ErrorPage></ErrorPage>,
         children: [
             {
                 path: "/",
@@ -41,10 +46,30 @@ export const router = createBrowserRouter([
     },
     {
         path: "dashboard",
+
         element: (
             <PrivateRoute>
                 <Dashboard></Dashboard>
             </PrivateRoute>
         ),
+        errorElement: <ErrorPage></ErrorPage>,
+        children: [
+            // general user routes
+            {
+                path: "myProfile",
+                index: true,
+                element: <MyProfile></MyProfile>,
+            },
+            {
+                path: "addPost",
+                element: <AddPost></AddPost>,
+            },
+            {
+                path: "myPosts",
+                element: <MyPosts></MyPosts>,
+            },
+            // admin routes
+            {},
+        ],
     },
 ])

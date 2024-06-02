@@ -93,7 +93,7 @@ const Navbar = () => {
                             </Link>
                         </Button>
                     ) : (
-                        <DropdownMenu className='rounded-full'>
+                        <DropdownMenu className="rounded-full">
                             <DropdownMenuTrigger className="size-8 rounded-full">
                                 <img className="rounded-full object-cover border size-8" src={user.photoURL} alt="" />
                             </DropdownMenuTrigger>
@@ -102,7 +102,8 @@ const Navbar = () => {
                                 <DropdownMenuLabel>{user.displayName}</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem className="p-0">
-                                    <Link className="px-2 py-1.5 w-full" to="/dashboard">
+                                    {/* TODO: dynamic route */}
+                                    <Link className="px-2 py-1.5 w-full" to={"/dashboard/myProfile"}>
                                         DashBoard
                                     </Link>
                                 </DropdownMenuItem>
