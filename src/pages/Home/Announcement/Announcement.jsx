@@ -15,7 +15,7 @@ const Announcement = () => {
                             <HiSpeakerphone className="text-xl text-red-500"></HiSpeakerphone>Engage, Discuss, Connect: Welcome to
                             Our Forum Community!
                         </h1>
-                        <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-4">
                             <img
                                 className="size-10 object-cover rounded-full"
                                 src="https://scontent.fdac140-1.fna.fbcdn.net/v/t1.6435-9/102674088_1591432164352632_6113831691829116928_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=VE57oIIHGt0Q7kNvgGYXSJF&_nc_ht=scontent.fdac140-1.fna&oh=00_AYA_v5lBkQZIOSAtTNhkZob4zXpqUZwz3tcSfcE91mN97Q&oe=66838421"

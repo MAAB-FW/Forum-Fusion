@@ -6,6 +6,7 @@ import JoinUs from "@/pages/JoinUs/JoinUs"
 import Dashboard from "@/layout/Dashboard"
 import Register from "@/pages/Register/Register"
 import PrivateRoute from "./PrivateRoute"
+import PostDetails from "@/pages/PostDetails/PostDetails"
 
 export const router = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
                         <Membership></Membership>
                     </PrivateRoute>
                 ),
+            },
+            {
+                path: "/post/:id",
+                element: <PostDetails></PostDetails>,
             },
             {
                 path: "/joinUs",
