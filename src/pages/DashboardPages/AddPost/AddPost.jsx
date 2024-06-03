@@ -1,9 +1,11 @@
+import useAuth from "@/hooks/useAuth"
 import React from "react"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 import Select from "react-select"
 
 const AddPost = () => {
+    const { user } = useAuth()
     const colorOptions = [
         { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
         { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
@@ -24,7 +26,7 @@ const AddPost = () => {
     } = useForm()
 
     const onSubmit = async (data) => {
-        
+        // TODO: send upVote and downVote as 0
     }
     // TODO: general user can add upto 5 post if reached than show relevant message
     if (posts >= 5) {
@@ -80,43 +82,13 @@ const AddPost = () => {
         )
     }
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="space-y-12">
-                <div className=" pb-12">
-                    <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Add Post</h2>
+        <div className="pb-12">
+            <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Add Post</h2>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="">
                     <p className="mt-1 text-sm leading-6 text-gray-600">This post will be displayed publicly.</p>
 
                     <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
-                        {/* <div className="col-span-full">
-                            <label htmlFor="author-image" className="block text-sm font-medium leading-6 text-gray-900">
-                                Author Image
-                            </label>
-                            <div className="mt-2 flex items-center gap-x-3">
-                                <img src="" alt="Author" className="h-12 w-12 text-gray-300" id="author-image-preview" />
-                                <input
-                                    id="author-image"
-                                    name="author-image"
-                                    type="file"
-                                    className="sr-only"
-                                    onChange={(e) => {
-                                        const reader = new FileReader()
-                                        reader.onload = () => {
-                                            const img = document.getElementById("author-image-preview")
-                                            img.src = reader.result
-                                        }
-                                        reader.readAsDataURL(e.target.files[0])
-                                    }}
-                                />
-                                <button
-                                    type="button"
-                                    className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                    onClick={() => document.getElementById("author-image").click()}
-                                >
-                                    Change
-                                </button>
-                            </div>
-                        </div>
-
                         <div className="sm:col-span-3">
                             <label htmlFor="author-name" className="block text-sm font-medium leading-6 text-gray-900">
                                 Author Name
@@ -125,9 +97,11 @@ const AddPost = () => {
                                 <input
                                     type="text"
                                     name="author-name"
+                                    defaultValue={user.displayName}
+                                    disabled
                                     id="author-name"
                                     autoComplete="name"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -140,21 +114,24 @@ const AddPost = () => {
                                 <input
                                     type="email"
                                     name="author-email"
+                                    defaultValue={user.email}
+                                    disabled
                                     id="author-email"
                                     autoComplete="email"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
-                        </div> */}
+                        </div>
 
                         <div className="sm:col-span-6">
                             <label htmlFor="post-title" className="block text-sm font-medium leading-6 text-gray-900">
-                                Post Title
+                                Post Title<span className="text-red-500">*</span>
                             </label>
                             <div className="mt-2">
                                 <input
                                     type="text"
                                     name="post-title"
+                                    required
                                     id="post-title"
                                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
@@ -163,12 +140,13 @@ const AddPost = () => {
 
                         <div className="col-span-full">
                             <label htmlFor="post-description" className="block text-sm font-medium leading-6 text-gray-900">
-                                Post Description
+                                Post Description<span className="text-red-500">*</span>
                             </label>
                             <div className="mt-2">
                                 <textarea
                                     id="post-description"
                                     name="post-description"
+                                    required
                                     rows={3}
                                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     defaultValue={""}
@@ -178,12 +156,13 @@ const AddPost = () => {
 
                         <div className="sm:col-span-4 ">
                             <label htmlFor="tag" className="block text-sm font-medium leading-6 text-gray-900">
-                                Tag
+                                Tag<span className="text-red-500">*</span>
                             </label>
                             <div className="mt-2">
                                 <Select
                                     // defaultValue={{ value: "orange", label: "Orange" }}
                                     isMulti
+                                    required
                                     name="colors"
                                     options={colorOptions}
                                     className="basic-multi-select"
@@ -239,8 +218,8 @@ const AddPost = () => {
                         </button>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     )
 }
 
