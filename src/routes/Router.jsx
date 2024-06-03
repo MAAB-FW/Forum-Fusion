@@ -12,6 +12,10 @@ import AddPost from "@/pages/DashboardPages/AddPost/AddPost"
 import MyPosts from "@/pages/DashboardPages/MyPosts/MyPosts"
 import ErrorPage from "@/layout/ErrorPage"
 import CommentsTable from "@/pages/Home/CommentsTable/CommentsTable"
+import AdminProfile from "@/pages/DashboardPages/AdminProfile/AdminProfile"
+import ManageUsers from "@/pages/DashboardPages/ManageUsers/ManageUsers"
+import ReportedComments from "@/pages/DashboardPages/ReportedComments/ReportedComments"
+import MakeAnnouncement from "@/pages/DashboardPages/MakeAnnouncement/MakeAnnouncement"
 
 export const router = createBrowserRouter([
     {
@@ -37,7 +41,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/comments/:id",
-                element: <CommentsTable></CommentsTable>,
+                element: (
+                    <PrivateRoute>
+                        <CommentsTable></CommentsTable>
+                    </PrivateRoute>
+                ),
             },
             {
                 path: "/joinUs",
@@ -62,18 +70,61 @@ export const router = createBrowserRouter([
             {
                 path: "myProfile",
                 index: true,
-                element: <MyProfile></MyProfile>,
+                element: (
+                    <PrivateRoute>
+                        <MyProfile></MyProfile>
+                    </PrivateRoute>
+                ),
             },
             {
                 path: "addPost",
-                element: <AddPost></AddPost>,
+                element: (
+                    <PrivateRoute>
+                        <AddPost></AddPost>
+                    </PrivateRoute>
+                ),
             },
             {
                 path: "myPosts",
-                element: <MyPosts></MyPosts>,
+                element: (
+                    <PrivateRoute>
+                        <MyPosts></MyPosts>
+                    </PrivateRoute>
+                ),
             },
             // admin routes
-            {},
+            {
+                path: "adminProfile",
+                element: (
+                    <PrivateRoute>
+                        <AdminProfile></AdminProfile>
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: "manageUsers",
+                element: (
+                    <PrivateRoute>
+                        <ManageUsers></ManageUsers>
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: "reportedComments",
+                element: (
+                    <PrivateRoute>
+                        <ReportedComments></ReportedComments>
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: "makeAnnouncement",
+                element: (
+                    <PrivateRoute>
+                        <MakeAnnouncement></MakeAnnouncement>
+                    </PrivateRoute>
+                ),
+            },
         ],
     },
 ])

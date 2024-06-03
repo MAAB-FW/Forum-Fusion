@@ -13,9 +13,11 @@ import { MdMenuOpen } from "react-icons/md"
 import { MdNotifications } from "react-icons/md"
 import useAuth from "@/hooks/useAuth"
 import toast from "react-hot-toast"
+import { useRole } from "@/hooks/useRole"
 
 const Navbar = () => {
     const { user, logoutUser } = useAuth()
+    const { role } = useRole()
 
     const handleLogout = () => {
         logoutUser()
@@ -103,7 +105,10 @@ const Navbar = () => {
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem className="p-0">
                                     {/* TODO: dynamic route */}
-                                    <Link className="px-2 py-1.5 w-full" to={"/dashboard/myProfile"}>
+                                    <Link
+                                        className="px-2 py-1.5 w-full"
+                                        to={`${role === "admin" ? "dashboard/adminProfile" : "dashboard/myProfile"}`}
+                                    >
                                         DashBoard
                                     </Link>
                                 </DropdownMenuItem>
