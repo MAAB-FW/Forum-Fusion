@@ -2,7 +2,7 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
+    // DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu"
@@ -134,7 +134,7 @@ const Dashboard = () => {
                 </nav>
             </div>
 
-            <div className="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
+            <div className="w-full pt-5 px-4 sm:px-6 md:px-8 lg:ps-72">
                 <Outlet></Outlet>
             </div>
             <ScrollRestoration></ScrollRestoration>
