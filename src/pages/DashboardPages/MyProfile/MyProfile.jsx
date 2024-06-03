@@ -21,9 +21,10 @@ const MyProfile = () => {
     ]
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
+        <div className="pb-6">
+            <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">My Profile</h2>
             <div className="flex items-center mb-6">
-                <img className="w-24 h-24 rounded-full mr-4" src={user.photoURL} alt={`${name}'s profile`} />
+                <img className="w-24 h-24 rounded-full mr-4" src={user.photoURL} alt={`${user.displayName}'s profile`} />
                 <div>
                     <h1 className="text-2xl font-bold">{user.displayName}</h1>
                     <p className="text-gray-700">{user.email}</p>

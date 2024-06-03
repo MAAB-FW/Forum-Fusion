@@ -13,7 +13,7 @@ import { Link, NavLink, Outlet, ScrollRestoration } from "react-router-dom"
 
 const Dashboard = () => {
     return (
-        <div>
+        <div className="max-w-7xl mx-auto">
             <div className="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 md:px-8 lg:hidden">
                 <div className="flex items-center py-4">
                     <DropdownMenu>
