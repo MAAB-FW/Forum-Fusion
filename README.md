@@ -1,16 +1,22 @@
-# React + Vite
+# Forum Fusion
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**admin username:** <pre>`a@b.com`</pre>
 
-Installed packages:
+**admin password:** <pre>`BBbb22!!`</pre>
 
--   tailwind css(with config)
--   shadcn(with config)
--   react router dom
--   react hot toast
--   moment js
--   react icons
--   react spinners
--   prop types
--   firebase
--   axios
+## Website Live Link:
+
+-   [Live Server](https://maab-fw-assignment-12.vercel.app/)
+
+## Website Features:
+
+1.
+2.
+3.
+4.
+5.
+6.
+7.
+8.
+9.
+10.
