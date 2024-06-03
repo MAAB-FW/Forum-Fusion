@@ -5,7 +5,7 @@ const Membership = () => {
         e.preventDefault()
     }
     return (
-        <div className="min-h-screen flex items-center justify-center 0 p-6">
+        <div className="flex items-center justify-center py-20">
             <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
                 <div className="mb-6 text-center">
                     <h1 className="text-lg md:text-2xl font-semibold">Membership Payment</h1>
