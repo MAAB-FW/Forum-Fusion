@@ -11,6 +11,7 @@ import MyProfile from "@/pages/DashboardPages/MyProfile/MyProfile"
 import AddPost from "@/pages/DashboardPages/AddPost/AddPost"
 import MyPosts from "@/pages/DashboardPages/MyPosts/MyPosts"
 import ErrorPage from "@/layout/ErrorPage"
+import CommentsTable from "@/pages/Home/CommentsTable/CommentsTable"
 
 export const router = createBrowserRouter([
     {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
                 element: <PostDetails></PostDetails>,
             },
             {
+                path: "/comments/:id",
+                element: <CommentsTable></CommentsTable>,
+            },
+            {
                 path: "/joinUs",
                 element: <JoinUs></JoinUs>,
             },
@@ -46,7 +51,6 @@ export const router = createBrowserRouter([
     },
     {
         path: "dashboard",
-
         element: (
             <PrivateRoute>
                 <Dashboard></Dashboard>

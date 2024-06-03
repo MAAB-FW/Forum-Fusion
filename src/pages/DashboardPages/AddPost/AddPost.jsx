@@ -23,7 +23,9 @@ const AddPost = () => {
         formState: { errors },
     } = useForm()
 
-    const onSubmit = async (data) => {}
+    const onSubmit = async (data) => {
+        
+    }
     // TODO: general user can add upto 5 post if reached than show relevant message
     if (posts >= 5) {
         return (
