@@ -1,5 +1,6 @@
 import React from "react"
 import { useForm } from "react-hook-form"
+import { Link } from "react-router-dom"
 import Select from "react-select"
 
 const AddPost = () => {
@@ -15,20 +16,73 @@ const AddPost = () => {
         { value: "slate", label: "Slate", color: "#253858" },
         { value: "silver", label: "Silver", color: "#666666" },
     ]
+    const posts = 0
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm()
 
+    const onSubmit = async (data) => {}
+    // TODO: general user can add upto 5 post if reached than show relevant message
+    if (posts >= 5) {
+        return (
+            <>
+                <div className="fixed p-4 inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 transition-opacity">
+                    <div className="bg-white rounded-lg shadow-xl sm:max-w-lg sm:w-full">
+                        <div className="bg-white rounded-t-2xl px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div className="sm:flex sm:items-start">
+                                <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                    <svg
+                                        className="h-6 w-6 text-red-600"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M6 18L18 6M6 6l12 12"
+                                        />
+                                    </svg>
+                                </div>
+                                <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                    <h3 className="text-lg leading-6 font-medium text-gray-900">Post Limit Reached</h3>
+                                    <div className="mt-2">
+                                        <p className="text-sm text-gray-700">
+                                            You can post up to 5 times with a Bronze badge. Upgrade to a Gold badge for unlimited
+                                            posts.
+                                        </p>
+                                        <p className="mt-2 text-sm text-gray-500">
+                                            Go to the membership page to become a Gold badge member.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-gray-50 rounded-b-2xl px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                            <Link
+                                to="/membership"
+                                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                // onClick={onDelete}
+                            >
+                                Membership Page
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </>
+        )
+    }
     return (
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-12">
                 <div className=" pb-12">
                     <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Add Post</h2>
-                    <p className="mt-1 text-sm leading-6 text-gray-600">
-                        This post will be displayed publicly.
-                    </p>
+                    <p className="mt-1 text-sm leading-6 text-gray-600">This post will be displayed publicly.</p>
 
                     <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
                         {/* <div className="col-span-full">
