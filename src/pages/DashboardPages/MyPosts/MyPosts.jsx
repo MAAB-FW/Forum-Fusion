@@ -6,7 +6,7 @@ import { Link } from "react-router-dom"
 const MyPosts = () => {
     const _id = 1
     return (
-        <div className="pb-12">
+        <div className="/min-h-[50vh] pb-12">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">My Posts</h2>
             <div>
                 <Table>
