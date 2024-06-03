@@ -24,6 +24,8 @@ module.exports = {
             },
             fontFamily: {
                 nunito: "'Nunito', 'sans-serif'",
+                mont: "'Montserrat', 'sans-serif'",
+                lato: "'Lato', 'sans-serif'",
             },
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",

@@ -16,7 +16,7 @@ import { useRole } from "@/hooks/useRole"
 const Dashboard = () => {
     const { role } = useRole()
     return (
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto font-lato">
             <div className="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 md:px-8 lg:hidden">
                 <div className="flex items-center py-4">
                     <DropdownMenu>
@@ -38,7 +38,7 @@ const Dashboard = () => {
                                                     : "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded hover:bg-gray-800 hover:text-white-300 focus:outline-none focus:ring-1 focus:ring-gray-600"
                                             }
                                         >
-                                            <MdAdminPanelSettings />
+                                            <MdAdminPanelSettings className="text-xl" />
                                             Admin Profile
                                         </NavLink>
                                     </DropdownMenuItem>
@@ -51,7 +51,7 @@ const Dashboard = () => {
                                                     : "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded hover:bg-gray-800 hover:text-white-300 focus:outline-none focus:ring-1 focus:ring-gray-600"
                                             }
                                         >
-                                            <MdManageAccounts />
+                                            <MdManageAccounts className="text-xl" />
                                             Manage Users
                                         </NavLink>
                                     </DropdownMenuItem>
@@ -64,7 +64,7 @@ const Dashboard = () => {
                                                     : "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded hover:bg-gray-800 hover:text-white-300 focus:outline-none focus:ring-1 focus:ring-gray-600"
                                             }
                                         >
-                                            <MdReport></MdReport>
+                                            <MdReport className="text-xl" />
                                             Reported Comments
                                         </NavLink>
                                     </DropdownMenuItem>
@@ -77,7 +77,7 @@ const Dashboard = () => {
                                                     : "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded hover:bg-gray-800 hover:text-white-300 focus:outline-none focus:ring-1 focus:ring-gray-600"
                                             }
                                         >
-                                            <HiSpeakerphone></HiSpeakerphone>
+                                            <HiSpeakerphone className="text-xl" />
                                             Make Announcement
                                         </NavLink>
                                     </DropdownMenuItem>
@@ -158,7 +158,7 @@ const Dashboard = () => {
                                                 : "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded-lg hover:bg-gray-800 hover:text-white-300 focus:outline-none focus:ring-1 focus:ring-gray-600"
                                         }
                                     >
-                                        <MdAdminPanelSettings />
+                                        <MdAdminPanelSettings className="text-xl" />
                                         Admin Profile
                                     </NavLink>
                                 </li>
@@ -171,7 +171,7 @@ const Dashboard = () => {
                                                 : "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded-lg hover:bg-gray-800 hover:text-white-300 focus:outline-none focus:ring-1 focus:ring-gray-600"
                                         }
                                     >
-                                        <MdManageAccounts />
+                                        <MdManageAccounts className="text-xl" />
                                         Manage Users
                                     </NavLink>
                                 </li>
@@ -184,7 +184,7 @@ const Dashboard = () => {
                                                 : "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded-lg hover:bg-gray-800 hover:text-white-300 focus:outline-none focus:ring-1 focus:ring-gray-600"
                                         }
                                     >
-                                        <MdReport></MdReport>
+                                        <MdReport className="text-xl" />
                                         Reported Comments
                                     </NavLink>
                                 </li>
@@ -197,7 +197,7 @@ const Dashboard = () => {
                                                 : "w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded-lg hover:bg-gray-800 hover:text-white-300 focus:outline-none focus:ring-1 focus:ring-gray-600"
                                         }
                                     >
-                                        <HiSpeakerphone></HiSpeakerphone>
+                                        <HiSpeakerphone className="text-xl" />
                                         Make Announcement
                                     </NavLink>
                                 </li>
@@ -249,7 +249,7 @@ const Dashboard = () => {
                 </nav>
             </div>
 
-            <div className="w-full pt-5 px-4 sm:px-6 md:px-8 lg:ps-72">
+            <div className="w-full pt-5 px-4 sm:px-6 md:px-8 lg:ps-72 font-mont">
                 <Outlet></Outlet>
             </div>
             <ScrollRestoration></ScrollRestoration>
