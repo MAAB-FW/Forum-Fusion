@@ -13,9 +13,11 @@ import { HiSpeakerphone } from "react-icons/hi"
 import { Link, NavLink, Outlet, ScrollRestoration } from "react-router-dom"
 import { useRole } from "@/hooks/useRole"
 import logo from "/F.Fusion.png"
+import LoadingSpinner from "@/components/LoadingSpinner"
 
 const Dashboard = () => {
-    const { role } = useRole()
+    const { role, isPending } = useRole()
+    if (isPending) return <LoadingSpinner></LoadingSpinner>
     return (
         <div className="max-w-7xl mx-auto font-lato">
             <div className="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 md:px-8 lg:hidden">

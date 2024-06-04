@@ -16,6 +16,7 @@ import AdminProfile from "@/pages/DashboardPages/AdminProfile/AdminProfile"
 import ManageUsers from "@/pages/DashboardPages/ManageUsers/ManageUsers"
 import ReportedComments from "@/pages/DashboardPages/ReportedComments/ReportedComments"
 import MakeAnnouncement from "@/pages/DashboardPages/MakeAnnouncement/MakeAnnouncement"
+import AdminRoute from "./AdminRoute"
 
 export const router = createBrowserRouter([
     {
@@ -96,33 +97,33 @@ export const router = createBrowserRouter([
             {
                 path: "adminProfile",
                 element: (
-                    <PrivateRoute>
+                    <AdminRoute>
                         <AdminProfile></AdminProfile>
-                    </PrivateRoute>
+                    </AdminRoute>
                 ),
             },
             {
                 path: "manageUsers",
                 element: (
-                    <PrivateRoute>
+                    <AdminRoute>
                         <ManageUsers></ManageUsers>
-                    </PrivateRoute>
+                    </AdminRoute>
                 ),
             },
             {
                 path: "reportedComments",
                 element: (
-                    <PrivateRoute>
+                    <AdminRoute>
                         <ReportedComments></ReportedComments>
-                    </PrivateRoute>
+                    </AdminRoute>
                 ),
             },
             {
                 path: "makeAnnouncement",
                 element: (
-                    <PrivateRoute>
+                    <AdminRoute>
                         <MakeAnnouncement></MakeAnnouncement>
-                    </PrivateRoute>
+                    </AdminRoute>
                 ),
             },
         ],

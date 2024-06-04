@@ -6,7 +6,7 @@ export const useRole = () => {
     const axiosSecure = useAxiosSecure()
     const { user, loading } = useAuth()
 
-    const { data: role } = useQuery({
+    const { data: role, isPending } = useQuery({
         queryKey: ["role"],
         enabled: !loading,
         queryFn: async () => {
@@ -16,5 +16,5 @@ export const useRole = () => {
         },
     })
 
-    return { role }
+    return { role, isPending }
 }

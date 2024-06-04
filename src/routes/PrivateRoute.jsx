@@ -10,11 +10,11 @@ const PrivateRoute = ({ children }) => {
 
     if (loading) return <LoadingSpinner></LoadingSpinner>
 
-    if (!user) {
-        return <Navigate to="/joinUs" state={{ from: location }} replace></Navigate>
+    if (user) {
+        return children
     }
 
-    return <div>{children}</div>
+    return <Navigate to="/joinUs" state={{ from: location }} replace></Navigate>
 }
 
 export default PrivateRoute
