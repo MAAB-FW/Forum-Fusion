@@ -1,18 +1,34 @@
 import useAuth from "@/hooks/useAuth"
+import useAxiosSecure from "@/hooks/useAxiosSecure"
 import React from "react"
 import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
 
 const MakeAnnouncement = () => {
     const { user } = useAuth()
-    const posts = 0
+    const axiosSecure = useAxiosSecure()
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm()
 
     const onSubmit = async (data) => {
-        // TODO: send upVote and downVote as 0
+        console.log(data)
+        axiosSecure
+            .post("/makeAnnouncement", { ...data, authorName: user?.displayName, authorImage: user?.photoURL })
+            .then((res) => {
+                console.log(res.data)
+                if (res.data.insertedId) {
+                    toast.success("Announcement Successfully Posted!")
+                    reset()
+                }
+            })
+            .catch((e) => {
+                console.log(e)
+                toast.error("Something went wrong!")
+            })
     }
     return (
         <div className="pb-12">
@@ -38,6 +54,21 @@ const MakeAnnouncement = () => {
                                 />
                             </div>
                         </div>
+                        <div className="sm:col-span-3 flex flex-col items-center">
+                            <label htmlFor="author-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Author Image
+                            </label>
+                            <div className="mt-2">
+                                <img
+                                    name="author-name"
+                                    src={user.photoURL}
+                                    disabled
+                                    id="author-name"
+                                    autoComplete="name"
+                                    className="block px-2 size-20 object-cover rounded-full border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
 
                         <div className="sm:col-span-6">
                             <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
@@ -45,6 +76,7 @@ const MakeAnnouncement = () => {
                             </label>
                             <div className="mt-2">
                                 <input
+                                    {...register("title", { required: true })}
                                     type="text"
                                     name="title"
                                     required
@@ -60,6 +92,7 @@ const MakeAnnouncement = () => {
                             </label>
                             <div className="mt-2">
                                 <textarea
+                                    {...register("description", { required: true })}
                                     id="description"
                                     name="description"
                                     required
