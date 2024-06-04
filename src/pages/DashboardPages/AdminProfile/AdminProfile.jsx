@@ -14,7 +14,7 @@ const AdminProfile = () => {
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                         <div className="flex items-center space-x-4">
                             <div className="flex items-center">
-                                <img className="h-8 w-8 rounded-full" src={user?.photoURL} alt="Admin Profile" />
+                                <img className="h-8 w-8 object-cover rounded-full" src={user?.photoURL} alt="Admin Profile" />
                                 <div className="ml-3">
                                     <p className="text-sm font-medium text-gray-900">{user?.displayName}</p>
                                     <p className="text-sm text-gray-500">{user.email}</p>

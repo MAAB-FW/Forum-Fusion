@@ -2,7 +2,7 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    // DropdownMenuLabel,
+    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu"
@@ -12,6 +12,7 @@ import { MdReport, MdMenuOpen, MdManageAccounts, MdAdminPanelSettings } from "re
 import { HiSpeakerphone } from "react-icons/hi"
 import { Link, NavLink, Outlet, ScrollRestoration } from "react-router-dom"
 import { useRole } from "@/hooks/useRole"
+import logo from "/F.Fusion.png"
 
 const Dashboard = () => {
     const { role } = useRole()
@@ -24,7 +25,15 @@ const Dashboard = () => {
                             <MdMenuOpen className="text-4xl"></MdMenuOpen>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="bg-white rounded p-1 m-2 border">
-                            {/* <DropdownMenuLabel>Forum Fusion</DropdownMenuLabel> */}
+                            <DropdownMenuLabel className="py-2 flex items-center justify-center">
+                                <Link
+                                    to="/"
+                                    className="flex max-w-fit gap-2 justify-center items-center font-semibold focus:outline-none focus:ring-1 focus:ring-gray-600"
+                                >
+                                    <img src={logo} className="size-6" alt="" />
+                                    Forum Fusion
+                                </Link>
+                            </DropdownMenuLabel>
                             {/* general users nav */}
                             <DropdownMenuSeparator />
                             {role === "admin" ? (
