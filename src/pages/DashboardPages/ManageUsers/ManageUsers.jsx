@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { useQuery } from "@tanstack/react-query"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
+import toast from "react-hot-toast"
 
 const ManageUsers = () => {
     const axiosSecure = useAxiosSecure()
@@ -26,8 +27,22 @@ const ManageUsers = () => {
         },
         initialData: [],
     })
-    console.log(users)
+    // console.log(users)
 
+    const handleMakeAdmin = (user) => {
+        console.log(user)
+        axiosSecure
+            .patch(`/makeAdmin/${user._id}`)
+            .then((res) => {
+                console.log(res)
+                if (res.data.modifiedCount > 0) toast.success("Success!")
+                refetch()
+            })
+            .catch((e) => {
+                console.log(e)
+                toast.error("Something went wrong!")
+            })
+    }
     return (
         <div className="/min-h-[50vh] /pb-6">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Manage Users</h2>
@@ -66,8 +81,11 @@ const ManageUsers = () => {
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
                                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                <AlertDialogAction className="bg-green-600 hover:bg-green-800">
-                                                    Confirm
+                                                <AlertDialogAction
+                                                    onClick={() => handleMakeAdmin(user)}
+                                                    className="bg-green-600 hover:bg-green-800"
+                                                >
+                                                    <button>Confirm</button>
                                                 </AlertDialogAction>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
