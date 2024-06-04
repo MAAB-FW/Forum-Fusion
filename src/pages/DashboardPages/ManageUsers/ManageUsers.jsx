@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
     AlertDialog,
@@ -19,10 +19,12 @@ import toast from "react-hot-toast"
 
 const ManageUsers = () => {
     const axiosSecure = useAxiosSecure()
+    const [search, setSearch] = useState("")
+
     const { data: users, refetch } = useQuery({
-        queryKey: ["manageUsers"],
+        queryKey: ["manageUsers", search],
         queryFn: async () => {
-            const res = await axiosSecure("/users")
+            const res = await axiosSecure(`/users?search=${search}`)
             return res.data
         },
         initialData: [],
@@ -46,6 +48,52 @@ const ManageUsers = () => {
     return (
         <div className="/min-h-[50vh] /pb-6">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Manage Users</h2>
+            <div>
+                <div className="form relative my-4">
+                    <div className="absolute left-2 -translate-y-1/2 top-1/2 p-1">
+                        <svg
+                            width="17"
+                            height="16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            role="img"
+                            aria-labelledby="search"
+                            className="w-5 h-5 text-gray-700"
+                        >
+                            <path
+                                d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9"
+                                stroke="currentColor"
+                                strokeWidth="1.333"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            ></path>
+                        </svg>
+                    </div>
+                    <input
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="input w-full rounded-full px-8 py-3 border-2 border-transparent focus:outline-none focus:border-blue-500 placeholder-gray-400 transition-all duration-300 shadow-md"
+                        placeholder="Type Username..."
+                        required=""
+                        type="text"
+                    />
+                    <button
+                        hidden={!search}
+                        onClick={() => setSearch("")}
+                        className="absolute right-3 -translate-y-1/2 top-1/2 p-1"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-5 h-5 text-gray-700"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
             <Table>
                 <TableCaption>
                     You can make a user <span className="underline">Admin</span> by clicking on the{" "}

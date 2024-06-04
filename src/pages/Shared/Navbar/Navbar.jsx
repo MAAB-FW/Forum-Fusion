@@ -114,7 +114,7 @@ const Navbar = () => {
                                 </DropdownMenuItem>
                                 <DropdownMenuItem className="p-0">
                                     <button className="px-2 py-1.5 w-full text-left" onClick={handleLogout}>
-                                        logout
+                                        Logout
                                     </button>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
