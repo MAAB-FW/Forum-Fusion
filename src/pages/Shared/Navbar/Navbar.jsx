@@ -14,10 +14,22 @@ import { MdNotifications } from "react-icons/md"
 import useAuth from "@/hooks/useAuth"
 import toast from "react-hot-toast"
 import { useRole } from "@/hooks/useRole"
+import useAxiosPublic from "@/hooks/useAxiosPublic"
+import { useQuery } from "@tanstack/react-query"
 
 const Navbar = () => {
     const { user, logoutUser } = useAuth()
     const { role } = useRole()
+
+    const axiosPublic = useAxiosPublic()
+    const { data: announcements } = useQuery({
+        queryKey: ["announcement"],
+        queryFn: async () => {
+            const res = await axiosPublic("/announcements")
+            return res.data
+        },
+        initialData: [],
+    })
 
     const handleLogout = () => {
         logoutUser()
@@ -84,8 +96,11 @@ const Navbar = () => {
                 </div>
                 <div className="flex items-center gap-3 lg:order-2">
                     <div className="relative">
-                        {/* TODO: Dynamic this */}
-                        {<span className="absolute text-white text-xs bg-red-600 px-1 rounded-2xl -right-1 -top-1">4</span>}
+                        {announcements.length > 0 && (
+                            <span className="absolute text-white text-xs bg-red-600 px-1 rounded-2xl -right-1 -top-1">
+                                {announcements.length}
+                            </span>
+                        )}
                         <MdNotifications className="text-3xl hover:text-purple-700 cursor-pointer"></MdNotifications>
                     </div>
                     {!user ? (

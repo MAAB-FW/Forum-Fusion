@@ -3,10 +3,12 @@ import useAxiosSecure from "@/hooks/useAxiosSecure"
 import React from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 const MakeAnnouncement = () => {
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure()
+    const navigate = useNavigate()
     const {
         register,
         handleSubmit,
@@ -23,6 +25,7 @@ const MakeAnnouncement = () => {
                 if (res.data.insertedId) {
                     toast.success("Announcement Successfully Posted!")
                     reset()
+                    navigate("/")
                 }
             })
             .catch((e) => {
