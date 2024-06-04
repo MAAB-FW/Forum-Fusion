@@ -12,7 +12,7 @@ import {
     signOut,
     updateProfile,
 } from "firebase/auth"
-import useAxiosSecure from "@/hooks/useAxiosSecure"
+import useAxiosPublic from "@/hooks/useAxiosPublic"
 
 export const AuthContext = createContext()
 const auth = getAuth(app)
@@ -22,7 +22,7 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [firstLoad, setFirstLoad] = useState(true)
-    const axiosSecure = useAxiosSecure()
+    const axiosPublic = useAxiosPublic()
 
     const registerUser = (email, password) => {
         setLoading(true)
@@ -56,14 +56,14 @@ const AuthProvider = ({ children }) => {
         const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
             if (currentUser) {
-                axiosSecure.post("/jwt", { email: "currentUser.email" }).then((res) => {
-                    console.log(res)
+                axiosPublic.post("/jwt", { email: currentUser?.email }, { withCredentials: true }).then((res) => {
+                    console.log(res.data)
                 })
                 setLoading(false)
                 setFirstLoad(false)
             } else {
-                axiosSecure.post("/logout").then((res) => {
-                    console.log(res)
+                axiosPublic.post("/logout", { email: currentUser?.email }, { withCredentials: true }).then((res) => {
+                    console.log(res.data)
                 })
                 setLoading(false)
                 setFirstLoad(false)
@@ -73,7 +73,7 @@ const AuthProvider = ({ children }) => {
         return () => {
             unSubscribe()
         }
-    }, [axiosSecure])
+    }, [axiosPublic])
 
     const authInfo = { user, loading, registerUser, updateUser, logoutUser, joinUsUser, setUser, googleLogin }
     if (firstLoad) {
