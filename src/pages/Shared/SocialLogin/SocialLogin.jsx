@@ -19,8 +19,6 @@ export const SocialLogin = () => {
                     userName: r.user.displayName,
                     email: r.user.email,
                     imageUrl: r.user.photoURL,
-                    badge: "bronze",
-                    role: "user",
                 }
                 navigate(from, { replace: true })
                 toast.success("Successfully Logged In!")

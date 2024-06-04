@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import logo from "/F.Fusion.png"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { SocialLogin } from "../Shared/SocialLogin/SocialLogin"
@@ -11,6 +11,7 @@ const JoinUs = () => {
     const location = useLocation()
     const from = location.state?.from?.pathname || "/"
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
 
     const {
         register,
@@ -19,15 +20,18 @@ const JoinUs = () => {
     } = useForm()
 
     const onSubmit = (data) => {
+        setLoading(true)
         joinUsUser(data.email, data.password)
             .then((r) => {
                 console.log(r.user)
                 toast.success("Successfully Logged In!")
                 navigate(from, { replace: true })
+                setLoading(false)
             })
             .catch((e) => {
                 console.log(e)
                 toast.error("Something went wrong!")
+                setLoading(false)
             })
     }
 
@@ -106,7 +110,8 @@ const JoinUs = () => {
                     <div>
                         <button
                             type="submit"
-                            className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            disabled={loading}
+                            className="relative disabled:cursor-not-allowed flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             Sign in
                         </button>

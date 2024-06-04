@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import logo from "/F.Fusion.png"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import useAuth from "@/hooks/useAuth"
@@ -13,6 +13,7 @@ const Register = () => {
     const from = location.state?.from?.pathname || "/"
     const navigate = useNavigate()
     const axiosPublic = useAxiosPublic()
+    const [loading, setLoading] = useState(false)
 
     const { registerUser, updateUser, setUser } = useAuth()
     const {
@@ -22,6 +23,7 @@ const Register = () => {
     } = useForm()
 
     const onSubmit = async (data) => {
+        setLoading(true)
         console.log(data)
         const userName = data.userName
         const email = data.email
@@ -29,7 +31,7 @@ const Register = () => {
         const image = data.image[0]
         const imageUrl = await ImageUpload(image)
         if (imageUrl) {
-            const userInfo = { userName, email, imageUrl, badge: "bronze", role: "user" }
+            const userInfo = { userName, email, imageUrl }
             registerUser(email, password)
                 .then((r) => {
                     console.log(r.user)
@@ -48,11 +50,13 @@ const Register = () => {
                         axiosPublic.post("/users", userInfo).then((res) => {
                             console.log(res)
                         })
+                        setLoading(false)
                     }
                 })
                 .catch((e) => {
                     console.log(e)
                     toast.error("Something went wrong!")
+                    setLoading(false)
                 })
         }
     }
@@ -168,7 +172,8 @@ const Register = () => {
                     <div>
                         <button
                             type="submit"
-                            className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            disabled={loading}
+                            className="relative disabled:cursor-not-allowed flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             Register
                         </button>
