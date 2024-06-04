@@ -12,6 +12,7 @@ import {
     signOut,
     updateProfile,
 } from "firebase/auth"
+import useAxiosPublic from "@/hooks/useAxiosPublic"
 
 export const AuthContext = createContext()
 const auth = getAuth(app)
@@ -21,6 +22,7 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [firstLoad, setFirstLoad] = useState(true)
+    const axiosPublic = useAxiosPublic()
 
     const registerUser = (email, password) => {
         setLoading(true)
@@ -53,6 +55,12 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
+            // if (currentUser) {
+            //     axiosPublic.post("/jwt", { email: "currentUser.email" }).then((res) => {
+            //         console.log(res)
+            //     })
+            // }
+
             setLoading(false)
             setFirstLoad(false)
         })
@@ -60,7 +68,7 @@ const AuthProvider = ({ children }) => {
         return () => {
             unSubscribe()
         }
-    }, [])
+    }, [axiosPublic])
 
     const authInfo = { user, loading, registerUser, updateUser, logoutUser, joinUsUser, setUser, googleLogin }
     if (firstLoad) {

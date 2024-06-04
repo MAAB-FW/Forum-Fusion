@@ -6,11 +6,14 @@ import { SocialLogin } from "../Shared/SocialLogin/SocialLogin"
 import { useForm } from "react-hook-form"
 import { ImageUpload } from "@/utils/ImageUpload"
 import toast from "react-hot-toast"
+import useAxiosPublic from "@/hooks/useAxiosPublic"
 
 const Register = () => {
     const location = useLocation()
     const from = location.state?.from?.pathname || "/"
     const navigate = useNavigate()
+    const axiosPublic = useAxiosPublic()
+
     const { registerUser, updateUser, setUser } = useAuth()
     const {
         register,
@@ -26,7 +29,7 @@ const Register = () => {
         const image = data.image[0]
         const imageUrl = await ImageUpload(image)
         if (imageUrl) {
-            const userInfo = { userName, email, imageUrl }
+            const userInfo = { userName, email, imageUrl, badge: "bronze", role: "user" }
             registerUser(email, password)
                 .then((r) => {
                     console.log(r.user)
@@ -42,6 +45,9 @@ const Register = () => {
                                 console.log(e)
                                 toast.error("Something went wrong!")
                             })
+                        axiosPublic.post("/users", userInfo).then((res) => {
+                            console.log(res)
+                        })
                     }
                 })
                 .catch((e) => {

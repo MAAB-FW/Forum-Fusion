@@ -1,4 +1,5 @@
 import useAuth from "@/hooks/useAuth"
+import useAxiosPublic from "@/hooks/useAxiosPublic"
 import React from "react"
 import toast from "react-hot-toast"
 import { FcGoogle } from "react-icons/fc"
@@ -8,13 +9,24 @@ export const SocialLogin = () => {
     const { googleLogin } = useAuth()
     const from = location.state?.from?.pathname || "/"
     const navigate = useNavigate()
+    const axiosPublic = useAxiosPublic()
 
     const handleGoogleLogin = () => {
         googleLogin()
             .then((r) => {
                 console.log(r.user)
+                const userInfo = {
+                    userName: r.user.displayName,
+                    email: r.user.email,
+                    imageUrl: r.user.photoURL,
+                    badge: "bronze",
+                    role: "user",
+                }
                 navigate(from, { replace: true })
                 toast.success("Successfully Logged In!")
+                axiosPublic.post("/users", userInfo).then((res) => {
+                    console.log(res)
+                })
             })
             .catch((e) => {
                 console.log(e)
