@@ -20,7 +20,7 @@ const MyProfile = () => {
     //     initialData: [],
     // })
 
-    const fetchItem = ["myProfile", "myPosts"]
+    const fetchItem = ["myProfile", "recentPosts"]
 
     const results = useQueries({
         queries: fetchItem.map((item) => ({

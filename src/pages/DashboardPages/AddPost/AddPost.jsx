@@ -48,11 +48,7 @@ const AddPost = () => {
         // { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
     ]
 
-    const {
-        register,
-        handleSubmit,
-        control,
-    } = useForm()
+    const { register, handleSubmit, control } = useForm()
 
     const onSubmit = async (data) => {
         // TODO: send upVote and downVote as 0
@@ -127,7 +123,7 @@ const AddPost = () => {
                                 className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
                                 // onClick={onDelete}
                             >
-                                Membership Page
+                                Become a Member
                             </Link>
                         </div>
                     </div>
