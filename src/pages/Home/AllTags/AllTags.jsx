@@ -6,7 +6,7 @@ import React from "react"
 const AllTags = () => {
     const axiosPublic = useAxiosPublic()
     const { data } = useQuery({
-        queryKey: ["tag"],
+        queryKey: ["tags"],
         queryFn: async () => {
             const res = await axiosPublic("/tags")
             // console.log(res.data)

@@ -1,32 +1,59 @@
 import useAuth from "@/hooks/useAuth"
+import useAxiosPublic from "@/hooks/useAxiosPublic"
+import useAxiosSecure from "@/hooks/useAxiosSecure"
+import { useQuery } from "@tanstack/react-query"
 import React from "react"
-import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
+import { useForm, Controller } from "react-hook-form"
+import toast from "react-hot-toast"
+import { Link, useNavigate } from "react-router-dom"
 import Select from "react-select"
 
 const AddPost = () => {
     const { user } = useAuth()
-    const colorOptions = [
-        { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
-        { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
-        { value: "purple", label: "Purple", color: "#5243AA" },
-        { value: "red", label: "Red", color: "#FF5630", isFixed: true },
-        { value: "orange", label: "Orange", color: "#FF8B00" },
-        { value: "yellow", label: "Yellow", color: "#FFC400" },
-        { value: "green", label: "Green", color: "#36B37E" },
-        { value: "forest", label: "Forest", color: "#00875A" },
-        { value: "slate", label: "Slate", color: "#253858" },
-        { value: "silver", label: "Silver", color: "#666666" },
-    ]
     const posts = 0
+    const axiosPublic = useAxiosPublic()
+    const axiosSecure = useAxiosSecure()
+    const navigate = useNavigate()
+    const { data: tags } = useQuery({
+        queryKey: ["tag"],
+        queryFn: async () => {
+            const res = await axiosPublic("/tags")
+            // console.log(res.data)
+            return res.data
+        },
+        initialData: [],
+    })
+    const options = [
+        ...tags.map((tag) => ({ value: tag.tag, label: tag.tag, name: tag.tag })),
+        // { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
+    ]
+
     const {
         register,
         handleSubmit,
+        control,
         formState: { errors },
     } = useForm()
 
     const onSubmit = async (data) => {
         // TODO: send upVote and downVote as 0
+        const postData = {
+            ...data,
+            authorName: user.displayName,
+            authorImage: user.photoURL,
+            authorEmail: user.email,
+            upVote: 0,
+            downVote: 0,
+        }
+        try {
+            const res = await axiosSecure.post("/addPost", postData)
+            console.log(res.data)
+            if (res.data.insertedId) toast.success("Post Added Successfully!")
+            navigate("/")
+        } catch (e) {
+            console.log(e)
+            toast.error("Something went wrong!")
+        }
     }
     // TODO: general user can add upto 5 post if reached than show relevant message
     if (posts >= 5) {
@@ -89,17 +116,34 @@ const AddPost = () => {
                     <p className="mt-1 text-sm leading-6 text-gray-600">This post will be displayed publicly.</p>
 
                     <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
+                        <div className="sm:col-span-full flex flex-col items-center lg:items-start">
+                            <label htmlFor="authorImage" className="block text-sm font-medium leading-6 text-gray-900">
+                                Author Image
+                            </label>
+                            <div className="mt-2">
+                                <img
+                                    name="authorImage"
+                                    src={user.photoURL}
+                                    disabled
+                                    id="authorImage"
+                                    autoComplete="name"
+                                    className="block px-2 size-20 object-cover rounded-full border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+
                         <div className="sm:col-span-3">
-                            <label htmlFor="author-name" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="authorName" className="block text-sm font-medium leading-6 text-gray-900">
                                 Author Name
                             </label>
                             <div className="mt-2">
                                 <input
                                     type="text"
-                                    name="author-name"
+                                    name="authorName"
                                     defaultValue={user.displayName}
                                     disabled
-                                    id="author-name"
+                                    readOnly
+                                    id="authorName"
                                     autoComplete="name"
                                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
@@ -107,16 +151,17 @@ const AddPost = () => {
                         </div>
 
                         <div className="sm:col-span-3">
-                            <label htmlFor="author-email" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="authorEmail" className="block text-sm font-medium leading-6 text-gray-900">
                                 Author Email
                             </label>
                             <div className="mt-2">
                                 <input
                                     type="email"
-                                    name="author-email"
+                                    name="authorEmail"
                                     defaultValue={user.email}
                                     disabled
-                                    id="author-email"
+                                    readOnly
+                                    id="authorEmail"
                                     autoComplete="email"
                                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
@@ -124,28 +169,30 @@ const AddPost = () => {
                         </div>
 
                         <div className="sm:col-span-6">
-                            <label htmlFor="post-title" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="postTitle" className="block text-sm font-medium leading-6 text-gray-900">
                                 Post Title<span className="text-red-500">*</span>
                             </label>
                             <div className="mt-2">
                                 <input
+                                    {...register("postTitle", { required: true })}
                                     type="text"
-                                    name="post-title"
+                                    name="postTitle"
                                     required
-                                    id="post-title"
+                                    id="postTitle"
                                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
 
                         <div className="col-span-full">
-                            <label htmlFor="post-description" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="postDescription" className="block text-sm font-medium leading-6 text-gray-900">
                                 Post Description<span className="text-red-500">*</span>
                             </label>
                             <div className="mt-2">
                                 <textarea
-                                    id="post-description"
-                                    name="post-description"
+                                    {...register("postDescription", { required: true })}
+                                    id="postDescription"
+                                    name="postDescription"
                                     required
                                     rows={3}
                                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -155,18 +202,24 @@ const AddPost = () => {
                         </div>
 
                         <div className="sm:col-span-4 ">
-                            <label htmlFor="tag" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="tags" className="block text-sm font-medium leading-6 text-gray-900">
                                 Tag<span className="text-red-500">*</span>
                             </label>
                             <div className="mt-2">
-                                <Select
-                                    // defaultValue={{ value: "orange", label: "Orange" }}
-                                    isMulti
-                                    required
-                                    name="colors"
-                                    options={colorOptions}
-                                    className="basic-multi-select"
-                                    classNamePrefix="select"
+                                <Controller
+                                    name="tags"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select
+                                            {...field}
+                                            isMulti
+                                            required
+                                            name="colors"
+                                            options={options}
+                                            className="basic-multi-select"
+                                            classNamePrefix="select"
+                                        />
+                                    )}
                                 />
                                 {/* <select
                                     id="tag"
