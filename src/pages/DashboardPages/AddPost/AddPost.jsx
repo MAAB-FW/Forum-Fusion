@@ -44,6 +44,7 @@ const AddPost = () => {
             authorEmail: user.email,
             upVote: 0,
             downVote: 0,
+            postTime: new Date(),
         }
         try {
             const res = await axiosSecure.post("/addPost", postData)
