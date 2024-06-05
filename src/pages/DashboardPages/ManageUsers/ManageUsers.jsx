@@ -12,16 +12,20 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { useQuery } from "@tanstack/react-query"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
 import toast from "react-hot-toast"
+import SmallLoading from "@/components/SmallLoading"
 
 const ManageUsers = () => {
     const axiosSecure = useAxiosSecure()
     const [search, setSearch] = useState("")
 
-    const { data: users, refetch } = useQuery({
+    const {
+        data: users,
+        refetch,
+        isFetching,
+    } = useQuery({
         queryKey: ["manageUsers", search],
         queryFn: async () => {
             const res = await axiosSecure(`/users?search=${search}`)
@@ -45,6 +49,9 @@ const ManageUsers = () => {
                 toast.error("Something went wrong!")
             })
     }
+
+    if (isFetching) return <SmallLoading />
+
     return (
         <div className="/min-h-[50vh] /pb-6">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Manage Users</h2>
@@ -118,7 +125,9 @@ const ManageUsers = () => {
                                 ) : (
                                     <AlertDialog>
                                         <AlertDialogTrigger>
-                                            <Button>Make admin</Button>
+                                            <span className="px-4 py-2.5 rounded bg-slate-950 hover:bg-slate-800 whitespace-nowrap font-medium text-white">
+                                                Make admin
+                                            </span>
                                         </AlertDialogTrigger>
                                         <AlertDialogContent>
                                             <AlertDialogHeader>
@@ -133,7 +142,7 @@ const ManageUsers = () => {
                                                     onClick={() => handleMakeAdmin(user)}
                                                     className="bg-green-600 hover:bg-green-800"
                                                 >
-                                                    <button>Confirm</button>
+                                                    <span>Confirm</span>
                                                 </AlertDialogAction>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>

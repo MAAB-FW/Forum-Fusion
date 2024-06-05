@@ -5,8 +5,8 @@ import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
 
 const SinglePost = ({ post }) => {
-    const { _id, tags, authorImage, postTitle, postTime, upVote, downVote } = post
-    console.log(post)
+    const { _id, tags, authorImage, postTitle, postTime, upVote } = post
+    // console.log(post)
     // const commentsCount = Math.floor(Math.random() * 100) // Random comments count
     // const votesCount = Math.floor(Math.random() * 100) // Random votes count
     return (

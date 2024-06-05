@@ -51,7 +51,6 @@ const AddPost = () => {
     const { register, handleSubmit, control } = useForm()
 
     const onSubmit = async (data) => {
-        // TODO: send upVote and downVote as 0
         const postData = {
             ...data,
             authorName: user.displayName,

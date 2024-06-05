@@ -1,6 +1,6 @@
 import useAuth from "@/hooks/useAuth"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
-import React from "react"
+import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
@@ -9,28 +9,32 @@ const MakeAnnouncement = () => {
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure()
     const navigate = useNavigate()
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors },
-    } = useForm()
+    const { register, handleSubmit, reset } = useForm()
+    const [posting, setPosting] = useState(false)
 
     const onSubmit = async (data) => {
-        console.log(data)
+        // console.log(data)
+        setPosting(true)
         axiosSecure
-            .post("/makeAnnouncement", { ...data, authorName: user?.displayName, authorImage: user?.photoURL })
+            .post("/makeAnnouncement", {
+                ...data,
+                authorName: user?.displayName,
+                authorImage: user?.photoURL,
+                postTime: new Date(),
+            })
             .then((res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 if (res.data.insertedId) {
                     toast.success("Announcement Successfully Posted!")
                     reset()
                     navigate("/")
                 }
+                setPosting(false)
             })
             .catch((e) => {
                 console.log(e)
                 toast.error("Something went wrong!")
+                setPosting(false)
             })
     }
     return (
@@ -109,6 +113,7 @@ const MakeAnnouncement = () => {
                     <div className="mt-6 flex items-center justify-end gap-x-6">
                         <button
                             type="submit"
+                            disabled={posting}
                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                             Make Announcement

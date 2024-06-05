@@ -6,6 +6,17 @@ import { useQuery } from "@tanstack/react-query"
 import useAuth from "@/hooks/useAuth"
 import SmallLoading from "@/components/SmallLoading"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 const MyPosts = () => {
     const { user } = useAuth()
@@ -20,7 +31,12 @@ const MyPosts = () => {
         },
         initialData: [],
     })
-    console.log(myPosts[0])
+
+    const handleDeletePost = (post) => {
+        console.log(post)
+    }
+
+    // console.log(myPosts[0])
     if (isFetching) return <SmallLoading />
 
     return (
@@ -33,7 +49,7 @@ const MyPosts = () => {
                         <TableRow>
                             <TableHead className="pr-0">Post Title</TableHead>
                             <TableHead className="w-[100px] whitespace-nowrap">Number of votes</TableHead>
-                            <TableHead colspan="2" className="text-center">
+                            <TableHead colSpan="2" className="text-center">
                                 Action
                             </TableHead>
                         </TableRow>
@@ -49,7 +65,31 @@ const MyPosts = () => {
                                     </Button>
                                 </TableCell>
                                 <TableCell>
-                                    <Button className="bg-red-500 hover:bg-red-700">Delete</Button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger>
+                                            <span className="bg-red-500 hover:bg-red-700 font-medium text-white rounded px-4 py-2.5">
+                                                Delete
+                                            </span>
+                                            {/* <Button>Make admin</Button> */}
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    This action will make the user an admin.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                <AlertDialogAction
+                                                    onClick={() => handleDeletePost(post)}
+                                                    className="bg-green-600 hover:bg-green-800"
+                                                >
+                                                    <span>Confirm</span>
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </TableCell>
                             </TableRow>
                         ))}
