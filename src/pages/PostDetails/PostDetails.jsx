@@ -1,13 +1,35 @@
-import React from "react"
+import SmallLoading from "@/components/SmallLoading"
+import useAxiosPublic from "@/hooks/useAxiosPublic"
+import { useQuery } from "@tanstack/react-query"
+import React, { useState } from "react"
 import { FaArrowDown, FaArrowUp, FaComment, FaShare } from "react-icons/fa"
+import { useParams } from "react-router-dom"
 
 const PostDetails = () => {
-    const authorImage = "https://via.placeholder.com/40"
-    const authorName = "John Doe"
-    const postTitle = "Sample Post Title"
-    const postDescription = "This is a sample description for the post."
-    const tag = "SampleTag"
-    const postTime = new Date()
+    const { id } = useParams()
+    const axiosPublic = useAxiosPublic()
+
+    const { data: post, isFetching } = useQuery({
+        queryKey: ["post"],
+        queryFn: async () => {
+            const res = await axiosPublic(`/post/${id}`)
+            console.log(res.data)
+            return res.data
+        },
+        initialData: [],
+    })
+
+    const { _id, tags, authorEmail, authorImage, authorName, downVote, postDescription, postTitle, upVote, postTime } = post
+
+    // const authorImage = "https://via.placeholder.com/40"
+    // const authorName = "John Doe"
+    // const postTitle = "Sample Post Title"
+    // const postDescription = "This is a sample description for the post."
+    // const tag = "SampleTag"
+    // const postTime = new Date()
+    if (isFetching) {
+        return <SmallLoading />
+    }
     return (
         <div className="bg-white shadow-md rounded-lg p-6 m-4">
             <div className="flex items-center mb-4">
@@ -19,8 +41,15 @@ const PostDetails = () => {
             </div>
             <h2 className="text-xl font-bold mb-2">{postTitle}</h2>
             <p className="text-gray-700 mb-4">{postDescription}</p>
-            <span className="inline-block bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded">{tag}</span>
-            <hr className="mt-4"/>
+            {tags.map((tag, idx) => (
+                <span
+                    key={idx}
+                    className="inline-block bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"
+                >
+                    {tag.name}
+                </span>
+            ))}
+            <hr className="mt-4" />
             <div className="flex items-center mt-4">
                 <button className="flex items-center mr-4 text-green-500 hover:text-green-700">
                     <FaArrowUp className="mr-1" />

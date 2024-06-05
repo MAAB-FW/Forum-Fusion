@@ -1,28 +1,45 @@
+import SmallLoading from "@/components/SmallLoading"
 import useAuth from "@/hooks/useAuth"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
 import SinglePost from "@/pages/Home/PostContainer/SinglePost"
-import { useQuery } from "@tanstack/react-query"
+import { useQueries, useQuery } from "@tanstack/react-query"
 import React from "react"
+import { FaCircle, FaStar } from "react-icons/fa"
+import { FcOk } from "react-icons/fc"
 
 const MyProfile = () => {
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure()
-    const { data } = useQuery({
-        queryKey: ["myProfile"],
-        queryFn: async () => {
-            const res = await axiosSecure(`/myProfile/${user.email}`)
-            console.log(res.data)
-            return res.data
-        },
-        initialData: [],
+    // const { data } = useQuery({
+    //     queryKey: ["myProfile"],
+    //     queryFn: async () => {
+    //         const res = await axiosSecure(`/myProfile/${user.email}`)
+    //         console.log(res.data)
+    //         return res.data
+    //     },
+    //     initialData: [],
+    // })
+
+    const fetchItem = ["myProfile", "myPosts"]
+
+    const results = useQueries({
+        queries: fetchItem.map((item) => ({
+            queryKey: [item],
+            queryFn: async () => {
+                const res = await axiosSecure(`/${item}/${user.email}`)
+                return res.data
+            },
+        })),
     })
 
-    const recentPosts = [
-        { id: 1, title: "Post One", content: "This is the content of the first post." },
-        { id: 2, title: "Post Two", content: "This is the content of the second post." },
-        { id: 3, title: "Post Three", content: "This is the content of the third post." },
-        { id: 4, title: "Post Three", content: "This is the content of the third post." },
-    ]
+    const isFetching = results.some((result) => result.isFetching)
+
+    const myProfile = results[0].data
+    const recentPosts = results[1].data
+
+    if (isFetching) {
+        return <SmallLoading />
+    }
 
     return (
         <div className="/min-h-[50vh] pb-6">
@@ -38,11 +55,12 @@ const MyProfile = () => {
                     <p className="text-gray-700">{user.email}</p>
                     <div className="mt-2">
                         <span
-                            className={`inline-flex items-center uppercase px-3 py-0.5 rounded-full text-sm font-medium ${
-                                data.badge === "gold" ? "bg-[#ffd700]" : "bg-[#c77b30]"
+                            className={`inline-flex items-center gap-2 uppercase px-3 py-0.5 rounded-full text-sm font-medium ${
+                                myProfile.badge === "gold" ? "bg-[#ffd700]" : "bg-[#c77b30]"
                             }`}
                         >
-                            {data.badge}
+                            {myProfile.badge === "gold" ? <FcOk /> : <FaCircle />}
+                            {myProfile.badge}
                         </span>
                     </div>
                 </div>
@@ -50,8 +68,8 @@ const MyProfile = () => {
 
             <div>
                 <h2 className="text-xl font-semibold mb-4">Recent Posts</h2>
-                {recentPosts.slice(0, 3).map((post, id) => (
-                    <SinglePost key={id}></SinglePost>
+                {recentPosts.slice(0, 3).map((post) => (
+                    <SinglePost key={post._id} post={post}></SinglePost>
                 ))}
             </div>
         </div>

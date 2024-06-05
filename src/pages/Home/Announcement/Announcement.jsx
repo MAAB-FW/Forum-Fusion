@@ -1,4 +1,5 @@
 import SectionTitle from "@/components/SectionTitle"
+import SmallLoading from "@/components/SmallLoading"
 import useAxiosPublic from "@/hooks/useAxiosPublic"
 import { useQuery } from "@tanstack/react-query"
 import React from "react"
@@ -6,7 +7,7 @@ import { HiSpeakerphone } from "react-icons/hi"
 
 const Announcement = () => {
     const axiosPublic = useAxiosPublic()
-    const { data } = useQuery({
+    const { data, isFetching } = useQuery({
         queryKey: ["announcement"],
         queryFn: async () => {
             const res = await axiosPublic("/announcements")
@@ -15,6 +16,9 @@ const Announcement = () => {
         initialData: [],
     })
     if (data.length === 0) return
+    if (isFetching) {
+        return <SmallLoading></SmallLoading>
+    }
     return (
         <div>
             <SectionTitle title="Announcement"></SectionTitle>

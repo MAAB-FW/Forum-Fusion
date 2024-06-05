@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button"
 import Pagination from "@/components/Pagination"
 import { useQuery } from "@tanstack/react-query"
 import useAxiosPublic from "@/hooks/useAxiosPublic"
+import SmallLoading from "@/components/SmallLoading"
 
 const PostContainer = () => {
     const axiosPublic = useAxiosPublic()
 
-    const { data: posts } = useQuery({
+    const { data: posts, isFetching } = useQuery({
         queryKey: ["posts"],
         queryFn: async () => {
             const res = await axiosPublic("/posts")
@@ -17,6 +18,10 @@ const PostContainer = () => {
         },
         initialData: [],
     })
+
+    if (isFetching) {
+        return <SmallLoading />
+    }
 
     return (
         <div className="mb-12">
@@ -29,7 +34,6 @@ const PostContainer = () => {
                     <SinglePost key={post._id} post={post}></SinglePost>
                 ))}
             </div>
-            <Pagination></Pagination>
         </div>
     )
 }

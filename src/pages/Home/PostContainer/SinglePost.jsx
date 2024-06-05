@@ -5,12 +5,10 @@ import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
 
 const SinglePost = ({ post }) => {
-    const { _id, tags, authorImage, postTitle, postTime } = post
+    const { _id, tags, authorImage, postTitle, postTime, upVote, downVote } = post
     console.log(post)
-    // const time = new Date().toLocaleString() // Example time format
     // const commentsCount = Math.floor(Math.random() * 100) // Random comments count
     // const votesCount = Math.floor(Math.random() * 100) // Random votes count
-    // const title = "Exploring the Wonders of React and Tailwind CSS"
     return (
         <Link
             to={`/post/${_id}`}
@@ -37,11 +35,11 @@ const SinglePost = ({ post }) => {
                 <div className="flex items-center">
                     <div className="flex items-center gap-2 mr-4">
                         <FaRegComment className="text-lg" />
-                        {"commentsCount"} Comments
+                        {"0"} Comments
                     </div>
                     <div className="flex items-center gap-2">
                         <LuVote className="text-xl" />
-                        {"votesCount"} Votes
+                        {upVote} Votes
                     </div>
                 </div>
             </div>
