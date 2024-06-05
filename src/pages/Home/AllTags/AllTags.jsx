@@ -9,7 +9,7 @@ const AllTags = () => {
         queryKey: ["tag"],
         queryFn: async () => {
             const res = await axiosPublic("/tags")
-            console.log(res.data)
+            // console.log(res.data)
             return res.data
         },
         initialData: [],

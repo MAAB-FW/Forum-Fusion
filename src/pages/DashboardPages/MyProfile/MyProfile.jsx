@@ -1,23 +1,27 @@
 import useAuth from "@/hooks/useAuth"
+import useAxiosSecure from "@/hooks/useAxiosSecure"
 import SinglePost from "@/pages/Home/PostContainer/SinglePost"
+import { useQuery } from "@tanstack/react-query"
 import React from "react"
 
 const MyProfile = () => {
     const { user } = useAuth()
-    const badgeDetails = {
-        bronze: {
-            color: "bg-[#c77b30]",
-            text: "Bronze Badge",
+    const axiosSecure = useAxiosSecure()
+    const { data } = useQuery({
+        queryKey: ["myProfile"],
+        queryFn: async () => {
+            const res = await axiosSecure(`/myProfile/${user.email}`)
+            console.log(res.data)
+            return res.data
         },
-        gold: {
-            color: "bg-[#ffd700]",
-            text: "Gold Badge",
-        },
-    }
+        initialData: [],
+    })
+
     const recentPosts = [
         { id: 1, title: "Post One", content: "This is the content of the first post." },
         { id: 2, title: "Post Two", content: "This is the content of the second post." },
         { id: 3, title: "Post Three", content: "This is the content of the third post." },
+        { id: 4, title: "Post Three", content: "This is the content of the third post." },
     ]
 
     return (
@@ -34,9 +38,11 @@ const MyProfile = () => {
                     <p className="text-gray-700">{user.email}</p>
                     <div className="mt-2">
                         <span
-                            className={`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium ${badgeDetails["gold"].color}`}
+                            className={`inline-flex items-center uppercase px-3 py-0.5 rounded-full text-sm font-medium ${
+                                data.badge === "gold" ? "bg-[#ffd700]" : "bg-[#c77b30]"
+                            }`}
                         >
-                            {badgeDetails["gold"].text}
+                            {data.badge}
                         </span>
                     </div>
                 </div>
@@ -44,7 +50,7 @@ const MyProfile = () => {
 
             <div>
                 <h2 className="text-xl font-semibold mb-4">Recent Posts</h2>
-                {recentPosts.map((post, id) => (
+                {recentPosts.slice(0, 3).map((post, id) => (
                     <SinglePost key={id}></SinglePost>
                 ))}
             </div>

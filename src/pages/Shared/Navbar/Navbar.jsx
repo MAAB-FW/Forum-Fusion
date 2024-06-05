@@ -112,7 +112,12 @@ const Navbar = () => {
                     ) : (
                         <DropdownMenu className="rounded-full">
                             <DropdownMenuTrigger className="size-8 rounded-full">
-                                <img className="rounded-full object-cover border size-8" src={user.photoURL} alt="" />
+                                <img
+                                    className="rounded-full object-cover border size-8"
+                                    src={user.photoURL}
+                                    alt=""
+                                    referrerPolicy="no-referrer"
+                                />
                             </DropdownMenuTrigger>
 
                             <DropdownMenuContent>
