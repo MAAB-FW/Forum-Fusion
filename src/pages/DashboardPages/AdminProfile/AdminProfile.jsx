@@ -39,7 +39,7 @@ const AdminProfile = () => {
             return toast.error("Valid tag name required!")
         }
         try {
-            const res = await axiosSecure.post("/tags", { tagText })
+            const res = await axiosSecure.post("/tags", { tag: tagText })
             console.log(res.data)
             if (res.data.insertedId) {
                 toast.success("Tag Successfully Added!")
