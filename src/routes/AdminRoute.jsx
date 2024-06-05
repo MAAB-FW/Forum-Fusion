@@ -9,7 +9,7 @@ const AdminRoute = ({ children }) => {
     const { user, loading } = useAuth()
     const { role, isPending } = useRole()
     const location = useLocation()
-    console.log(isPending)
+    
     if (loading || isPending) return <LoadingSpinner></LoadingSpinner>
 
     if (user && role === "admin") {

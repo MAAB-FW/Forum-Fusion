@@ -1,16 +1,36 @@
 import useAuth from "@/hooks/useAuth"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { MdOutlineArticle } from "react-icons/md"
 import { FcComments } from "react-icons/fc"
 import { FaUsers } from "react-icons/fa"
+import useAxiosSecure from "@/hooks/useAxiosSecure"
+import toast from "react-hot-toast"
 
 const AdminProfile = () => {
     const { user } = useAuth()
+    const [tag, setTag] = useState("")
+    const axiosSecure = useAxiosSecure()
+
+    const handleAddTag = async () => {
+        const tagText = tag.replace(/ /g, "_")
+        try {
+            const res = await axiosSecure.post("/tags", { tagText })
+            console.log(res.data)
+            if (res.data.insertedId) {
+                toast.success("Tag Successfully Added!")
+                setTag("")
+            }
+        } catch (e) {
+            console.log("error tag ", e)
+            toast.error("Something went wrong!")
+        }
+    }
+
     return (
         <div className="/min-h-[50vh] /pb-6">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Admin Profile</h2>
-            <div className="/min-h-screen bg-gray-100">
-                <header className="bg-white shadow py-4">
+            <div className="/min-h-screen bg-gray-100 rounded-xl">
+                <header className="bg-white rounded-t-xl shadow py-4">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                         <div className="flex items-center space-x-4">
                             <div className="flex items-center">
@@ -83,6 +103,25 @@ const AdminProfile = () => {
                         </div>
                     </div>
                 </main>
+                <div>piecart</div>
+
+                <div className="pb-8">
+                    <div className="w-[95%] mx-auto mt-10 p-4 border rounded-lg shadow-lg">
+                        <h2 className="text-xl font-semibold mb-4">Add Tags</h2>
+                        <div className="flex">
+                            <input
+                                type="text"
+                                className="flex-grow p-2 border rounded-l-lg focus:outline-none focus:border-blue-500"
+                                value={tag}
+                                onChange={(e) => setTag(e.target.value)}
+                                placeholder="Enter tag"
+                            />
+                            <button onClick={handleAddTag} className="p-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )
