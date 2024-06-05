@@ -2,9 +2,27 @@ import React from "react"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query"
+import useAuth from "@/hooks/useAuth"
+import SmallLoading from "@/components/SmallLoading"
+import useAxiosSecure from "@/hooks/useAxiosSecure"
 
 const MyPosts = () => {
-    const _id = 1
+    const { user } = useAuth()
+    const axiosSecure = useAxiosSecure()
+
+    const { data: myPosts, isFetching } = useQuery({
+        queryKey: ["myPosts"],
+        queryFn: async () => {
+            const res = await axiosSecure(`/myPosts/${user.email}`)
+            // console.log(res.data)
+            return res.data
+        },
+        initialData: [],
+    })
+    console.log(myPosts[0])
+    if (isFetching) return <SmallLoading />
+
     return (
         <div className="/min-h-[50vh] pb-12">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">My Posts</h2>
@@ -21,20 +39,20 @@ const MyPosts = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow>
-                            <TableCell className="font-medium min-w-52">
-                                Exploring the Wonders of React and Tailwind CSS
-                            </TableCell>
-                            <TableCell className="text-center">250</TableCell>
-                            <TableCell className="text-right">
-                                <Button>
-                                    <Link to={`/comments/${_id}`}>Comment</Link>
-                                </Button>
-                            </TableCell>
-                            <TableCell>
-                                <Button className="bg-red-500 hover:bg-red-700">Delete</Button>
-                            </TableCell>
-                        </TableRow>
+                        {myPosts.map((post) => (
+                            <TableRow key={post._id}>
+                                <TableCell className="font-medium min-w-52">{post.postTitle}</TableCell>
+                                <TableCell className="text-center">{post.upVote}</TableCell>
+                                <TableCell className="text-right">
+                                    <Button>
+                                        <Link to={`/comments/${post._id}`}>Comment</Link>
+                                    </Button>
+                                </TableCell>
+                                <TableCell>
+                                    <Button className="bg-red-500 hover:bg-red-700">Delete</Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
             </div>

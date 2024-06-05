@@ -1,8 +1,9 @@
+import SmallLoading from "@/components/SmallLoading"
 import useAuth from "@/hooks/useAuth"
 import useAxiosPublic from "@/hooks/useAxiosPublic"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
-import { useQuery } from "@tanstack/react-query"
-import React from "react"
+import { useQueries, useQuery } from "@tanstack/react-query"
+import React, { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import toast from "react-hot-toast"
 import { Link, useNavigate } from "react-router-dom"
@@ -10,12 +11,13 @@ import Select from "react-select"
 
 const AddPost = () => {
     const { user } = useAuth()
-    const posts = 0
+    // const myPosts = 5
     const axiosPublic = useAxiosPublic()
     const axiosSecure = useAxiosSecure()
     const navigate = useNavigate()
+    const [posting, setPosting] = useState(false)
     const { data: tags } = useQuery({
-        queryKey: ["tag"],
+        queryKey: ["tags"],
         queryFn: async () => {
             const res = await axiosPublic("/tags")
             // console.log(res.data)
@@ -23,6 +25,24 @@ const AddPost = () => {
         },
         initialData: [],
     })
+
+    const fetchItem = ["myProfile", "myPosts"]
+
+    const results = useQueries({
+        queries: fetchItem.map((item) => ({
+            queryKey: [item],
+            queryFn: async () => {
+                const res = await axiosSecure(`/${item}/${user.email}`)
+                return res.data
+            },
+        })),
+    })
+
+    const isFetching = results.some((result) => result.isFetching)
+
+    const myProfile = results[0].data
+    const myPosts = results[1].data
+
     const options = [
         ...tags.map((tag) => ({ value: tag.tag, label: tag.tag, name: tag.tag })),
         // { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
@@ -32,7 +52,6 @@ const AddPost = () => {
         register,
         handleSubmit,
         control,
-        formState: { errors },
     } = useForm()
 
     const onSubmit = async (data) => {
@@ -47,17 +66,24 @@ const AddPost = () => {
             postTime: new Date(),
         }
         try {
+            setPosting(true)
             const res = await axiosSecure.post("/addPost", postData)
             console.log(res.data)
             if (res.data.insertedId) toast.success("Post Added Successfully!")
             navigate("/")
+            setPosting(false)
         } catch (e) {
             console.log(e)
             toast.error("Something went wrong!")
+            setPosting(false)
         }
     }
-    // TODO: general user can add upto 5 post if reached than show relevant message
-    if (posts >= 5) {
+
+    if (isFetching) {
+        return <SmallLoading />
+    }
+
+    if (myPosts.length >= 5 && myProfile.badge === "bronze") {
         return (
             <>
                 <div className="fixed p-4 inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 transition-opacity">
@@ -265,6 +291,7 @@ const AddPost = () => {
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6">
                         <button
+                            disabled={posting}
                             type="submit"
                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >

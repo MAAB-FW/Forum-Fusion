@@ -2,9 +2,9 @@ import SmallLoading from "@/components/SmallLoading"
 import useAuth from "@/hooks/useAuth"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
 import SinglePost from "@/pages/Home/PostContainer/SinglePost"
-import { useQueries, useQuery } from "@tanstack/react-query"
+import { useQueries } from "@tanstack/react-query"
 import React from "react"
-import { FaCircle, FaStar } from "react-icons/fa"
+import { FaCircle } from "react-icons/fa"
 import { FcOk } from "react-icons/fc"
 
 const MyProfile = () => {
