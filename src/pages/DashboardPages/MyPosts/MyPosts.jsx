@@ -44,6 +44,7 @@ const MyPosts = () => {
             // console.log(res.data)
             if (res.data.deletedCount > 0) toast.success("Post deleted successfully!")
             refetch()
+            const cRes = await axiosSecure.delete(`/deleteComments/${post._id}`)
         } catch (e) {
             console.log(e)
             toast.error("Something went wrong!")

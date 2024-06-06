@@ -59,6 +59,7 @@ const AddPost = () => {
             authorEmail: user.email,
             upVote: 0,
             downVote: 0,
+            commentsCount: 0,
             postTime: new Date(),
         }
         try {

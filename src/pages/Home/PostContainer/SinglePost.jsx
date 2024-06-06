@@ -5,10 +5,8 @@ import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
 
 const SinglePost = ({ post }) => {
-    const { _id, tags, authorImage, postTitle, postTime, upVote } = post
-    // console.log(post)
-    // const commentsCount = Math.floor(Math.random() * 100) // Random comments count
-    // const votesCount = Math.floor(Math.random() * 100) // Random votes count
+    const { _id, tags, authorImage, postTitle, postTime, upVote, commentsCount } = post
+
     return (
         <Link
             to={`/post/${_id}`}
@@ -35,7 +33,7 @@ const SinglePost = ({ post }) => {
                 <div className="flex items-center">
                     <div className="flex items-center gap-2 mr-4">
                         <FaRegComment className="text-lg" />
-                        {"0"} Comments
+                        {commentsCount} Comments
                     </div>
                     <div className="flex items-center gap-2">
                         <LuVote className="text-xl" />

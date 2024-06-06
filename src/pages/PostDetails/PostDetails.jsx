@@ -49,12 +49,12 @@ const PostDetails = () => {
         enabled: !!user,
         queryFn: async () => {
             const res = await axiosSecure(`/comments/${id}`)
-            console.log(res.data)
+            // console.log(res.data)
             return res.data
         },
         initialData: [],
     })
-    console.log(comments)
+    // console.log(comments)
 
     const { _id, tags, authorImage, authorName, downVote, postDescription, postTitle, upVote, postTime } = post
     const shareUrl = `${import.meta.env.VITE_API_URL}/post/${_id}`
@@ -75,10 +75,10 @@ const PostDetails = () => {
         }
         console.log(commentData)
         axiosSecure
-            .post("/comments", commentData)
+            .post(`/comments/${_id}`, commentData)
             .then((res) => {
                 console.log(res.data)
-                if (res.data.insertedId) {
+                if (res.data.result.insertedId) {
                     refetch()
                     e.target.reset()
                 }
