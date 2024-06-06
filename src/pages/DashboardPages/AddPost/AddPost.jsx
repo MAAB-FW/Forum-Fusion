@@ -79,7 +79,7 @@ const AddPost = () => {
         return <SmallLoading />
     }
 
-    if (myPosts.length >= 5 && myProfile.badge === "bronze") {
+    if (myPosts.length >= 5 && myProfile.badge !== "gold") {
         return (
             <>
                 <div className="fixed p-4 inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 transition-opacity">

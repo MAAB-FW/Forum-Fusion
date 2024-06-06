@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
-const CheckoutForm = ({ paymentFee }) => {
+const CheckoutForm = ({ paymentFee, refetch }) => {
     const stripe = useStripe()
     const elements = useElements()
     const { user } = useAuth()
@@ -46,7 +46,8 @@ const CheckoutForm = ({ paymentFee }) => {
         onSuccess: async () => {
             // Todo: don't work
             await queryClient.invalidateQueries(["myProfile"])
-            navigate(location.state?.from?.pathname || "/")
+            navigate(location.state?.from?.pathname)
+            refetch()
         },
     })
 
