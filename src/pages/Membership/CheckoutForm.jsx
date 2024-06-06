@@ -122,4 +122,5 @@ export default CheckoutForm
 
 CheckoutForm.propTypes = {
     paymentFee: PropTypes.number,
+    refetch: PropTypes.func,
 }

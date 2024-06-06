@@ -1,9 +1,10 @@
-import React, { useState } from "react"
+import React from "react"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
+import PropTypes from "prop-types"
 
-const Pagination = () => {
-    const [currentPage, setCurrentPage] = useState(1)
-    const pages = [...Array(5).keys()]
+const Pagination = ({ currentPage, setCurrentPage, count, itemPerPage }) => {
+    const numberOfPages = Math.ceil(count / itemPerPage)
+    const pages = [...Array(numberOfPages).keys()]
 
     return (
         <div className="flex items-center justify-between border-t border-gray-200 bg-base-100 px-4 py-3 sm:px-6">
@@ -72,3 +73,9 @@ const Pagination = () => {
 }
 
 export default Pagination
+Pagination.propTypes = {
+    currentPage: PropTypes.number,
+    setCurrentPage: PropTypes.func,
+    count: PropTypes.number,
+    itemPerPage: PropTypes.number,
+}

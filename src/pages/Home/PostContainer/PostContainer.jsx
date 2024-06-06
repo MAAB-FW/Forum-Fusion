@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import SinglePost from "./SinglePost"
 import { Button } from "@/components/ui/button"
 import Pagination from "@/components/Pagination"
@@ -8,12 +8,26 @@ import SmallLoading from "@/components/SmallLoading"
 
 const PostContainer = () => {
     const axiosPublic = useAxiosPublic()
+    const [currentPage, setCurrentPage] = useState(0)
+    const itemPerPage = 5
+    const [popularity, setPopularity] = useState(false)
+
+    const { data } = useQuery({
+        queryKey: ["postsCount"],
+        queryFn: async () => {
+            const res = await axiosPublic("/postsCount")
+            // console.log(res.data)
+            return res.data
+        },
+        initialData: [],
+    })
+    const { count } = data
 
     const { data: posts, isFetching } = useQuery({
-        queryKey: ["posts"],
+        queryKey: ["posts", currentPage],
         queryFn: async () => {
-            const res = await axiosPublic("/posts")
-            console.log(res.data)
+            const res = await axiosPublic(`/posts?size=${itemPerPage}&page=${currentPage}`)
+            // console.log(res.data)
             return res.data
         },
         initialData: [],
@@ -27,13 +41,19 @@ const PostContainer = () => {
         <div className="mb-12">
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold">All Posts:</h2>
-                <Button>Sort by Popularity</Button>
+                <Button onClick={() => setPopularity(true)}>Sort by Popularity</Button>
             </div>
             <div className="my-10 ">
                 {posts.map((post) => (
                     <SinglePost key={post._id} post={post}></SinglePost>
                 ))}
             </div>
+            <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                count={count}
+                itemPerPage={itemPerPage}
+            ></Pagination>
         </div>
     )
 }
