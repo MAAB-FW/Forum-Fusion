@@ -46,6 +46,7 @@ const PostDetails = () => {
 
     const { data: comments, refetch } = useQuery({
         queryKey: ["comments"],
+        enabled: !!user,
         queryFn: async () => {
             const res = await axiosSecure(`/comments/${id}`)
             console.log(res.data)
@@ -164,7 +165,7 @@ const PostDetails = () => {
                     </div>
                 </div>
             </div>
-            {!user && (
+            {!user ? (
                 <>
                     <div className="text-center text-yellow-600 font-medium mt-6">
                         You need to Join for vote, comment or share.{" "}
@@ -173,49 +174,55 @@ const PostDetails = () => {
                         </Link>
                     </div>
                 </>
-            )}
-            {isCommentOpen && (
-                <div>
-                    <div className="w-full bg-white rounded-lg  p-2 my-4 ">
-                        <h3 className="font-bold">Discussion</h3>
+            ) : (
+                <>
+                    {isCommentOpen && (
+                        <div>
+                            <div className="w-full bg-white rounded-lg  p-2 my-4 ">
+                                <h3 className="font-bold">Discussion</h3>
 
-                        <form onSubmit={handleComment}>
-                            <div className="flex flex-col">
-                                {comments?.map((comment) => (
-                                    <div key={comment._id} className="border rounded-md p-3 ml-3 my-3">
-                                        <div className="flex gap-3 items-center">
-                                            <img
-                                                src={comment.commentAuthorImage}
-                                                className="object-cover w-8 h-8 rounded-full 
+                                <form onSubmit={handleComment}>
+                                    <div className="flex flex-col">
+                                        {comments?.map((comment) => (
+                                            <div key={comment._id} className="border rounded-md p-3 ml-3 my-3">
+                                                <div className="flex gap-3 items-center">
+                                                    <img
+                                                        src={comment.commentAuthorImage}
+                                                        className="object-cover w-8 h-8 rounded-full 
                     border-2 border-emerald-400  shadow-emerald-400
                     "
-                                            />
+                                                    />
 
-                                            <h3 className="font-bold">{comment.commentAuthorName}</h3>
-                                        </div>
+                                                    <h3 className="font-bold">{comment.commentAuthorName}</h3>
+                                                </div>
 
-                                        <p className="text-gray-600 mt-2">{comment.comment}</p>
+                                                <p className="text-gray-600 mt-2">{comment.comment}</p>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
 
-                            <div className="w-full px-3 my-2">
-                                <textarea
-                                    className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
-                                    name="comment"
-                                    placeholder="Type Your Comment"
-                                    required
-                                ></textarea>
-                            </div>
+                                    <div className="w-full px-3 my-2">
+                                        <textarea
+                                            className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+                                            name="comment"
+                                            placeholder="Type Your Comment"
+                                            required
+                                        ></textarea>
+                                    </div>
 
-                            <div className="w-full flex justify-end px-3">
-                                <button type="submit" className="px-2.5 py-1.5 rounded-md text-white text-sm bg-indigo-500">
-                                    Post Comment
-                                </button>
+                                    <div className="w-full flex justify-end px-3">
+                                        <button
+                                            type="submit"
+                                            className="px-2.5 py-1.5 rounded-md text-white text-sm bg-indigo-500"
+                                        >
+                                            Post Comment
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
-                    </div>
-                </div>
+                        </div>
+                    )}
+                </>
             )}
         </div>
     )
