@@ -31,7 +31,7 @@ const PostDetails = () => {
         return <SmallLoading />
     }
     return (
-        <div className="bg-white shadow-md rounded-lg p-6 m-4">
+        <div className="bg-white shadow-md rounded-lg p-6 my-10">
             <div className="flex items-center mb-4">
                 <img src={authorImage} alt={authorName} className="w-10 h-10 rounded-full mr-4" />
                 <div>
@@ -50,23 +50,27 @@ const PostDetails = () => {
                 </span>
             ))}
             <hr className="mt-4" />
-            <div className="flex items-center mt-4">
-                <button className="flex items-center mr-4 text-green-500 hover:text-green-700">
-                    <FaArrowUp className="mr-1" />
-                    UpVote
-                </button>
-                <button className="flex items-center mr-4 text-red-500 hover:text-red-700">
-                    <FaArrowDown className="mr-1" />
-                    DownVote
-                </button>
-                <button className="flex items-center mr-4 text-gray-500 hover:text-gray-700">
-                    <FaComment className="mr-1" />
-                    Comment
-                </button>
-                <button className="flex items-center text-gray-500 hover:text-gray-700">
-                    <FaShare className="mr-1" />
-                    Share
-                </button>
+            <div className="flex flex-col md:flex-row gap-5 justify-between mt-4">
+                <div className="flex gap-10">
+                    <button className="flex items-center mr-4 text-green-500 hover:text-green-700">
+                        <FaArrowUp className="mr-1" />
+                        UpVote
+                    </button>
+                    <button className="flex items-center mr-4 text-red-500 hover:text-red-700">
+                        <FaArrowDown className="mr-1" />
+                        DownVote
+                    </button>
+                </div>
+                <div className="flex gap-10">
+                    <button className="flex items-center mr-4 text-gray-500 hover:text-gray-700">
+                        <FaComment className="mr-1" />
+                        Comment
+                    </button>
+                    <button className="flex items-center text-gray-500 hover:text-gray-700">
+                        <FaShare className="mr-1" />
+                        Share
+                    </button>
+                </div>
             </div>
         </div>
     )

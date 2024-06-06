@@ -42,11 +42,11 @@ const CheckoutForm = ({ paymentFee }) => {
                     console.log(e)
                     toast.error("Something went wrong!")
                 })
-            navigate(location.state?.from?.pathname || "/")
         },
-        onSuccess: () => {
+        onSuccess: async () => {
             // Todo: don't work
-            queryClient.invalidateQueries({ queryKey: ["myProfile"] })
+            await queryClient.invalidateQueries(["myProfile"])
+            navigate(location.state?.from?.pathname || "/")
         },
     })
 

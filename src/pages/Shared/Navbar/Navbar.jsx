@@ -42,7 +42,7 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="bg-white py-2.5 h-14 flex items-center justify-center shadow-xl ">
+        <nav className="bg-white py-2.5 h-14 flex items-center justify-center shadow">
             <div className="flex items-center justify-between mx-auto md:w-[85%] w-[90%] max-w-7xl">
                 <Link to="/" className="hidden md:flex items-center">
                     <img src={logo} className="h-6 mr-3 sm:h-9 object-cover" alt="Logo" />
