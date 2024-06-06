@@ -12,14 +12,14 @@ const PostContainer = () => {
     const itemPerPage = 5
     const [popularity, setPopularity] = useState(false)
 
-    const { data } = useQuery({
+    const { data, isFetching: isFetching2 } = useQuery({
         queryKey: ["postsCount"],
         queryFn: async () => {
             const res = await axiosPublic("/postsCount")
             // console.log(res.data)
             return res.data
         },
-        initialData: [],
+        initialData: {},
     })
     const { count } = data
 
@@ -33,7 +33,7 @@ const PostContainer = () => {
         initialData: [],
     })
 
-    if (isFetching) {
+    if (isFetching || isFetching2) {
         return <SmallLoading />
     }
 
