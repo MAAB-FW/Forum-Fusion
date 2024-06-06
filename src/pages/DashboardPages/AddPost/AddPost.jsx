@@ -6,7 +6,7 @@ import { useQueries, useQuery } from "@tanstack/react-query"
 import React, { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import toast from "react-hot-toast"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import Select from "react-select"
 
 const AddPost = () => {
@@ -14,6 +14,7 @@ const AddPost = () => {
     // const myPosts = 5
     const axiosPublic = useAxiosPublic()
     const axiosSecure = useAxiosSecure()
+    const location = useLocation()
     const navigate = useNavigate()
     const [posting, setPosting] = useState(false)
     const { data: tags } = useQuery({
@@ -119,6 +120,7 @@ const AddPost = () => {
                         <div className="bg-gray-50 rounded-b-2xl px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <Link
                                 to="/membership"
+                                state={{ from: location }}
                                 className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
                                 // onClick={onDelete}
                             >

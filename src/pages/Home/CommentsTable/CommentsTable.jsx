@@ -62,13 +62,15 @@ const CommentsTable = () => {
                         <TableCell className="text-center">
                             <select name="" id="">
                                 <option value="Select Feedback">Select Feedback</option>
-                                <option value="Bad">Bad</option>
-                                <option value="Good">Good</option>
-                                <option value="Best">Best</option>
+                                <option value="Bad">Spam</option>
+                                <option value="Good">Hate Speech</option>
+                                <option value="Best">Harassment</option>
                             </select>
                         </TableCell>
                         <TableCell className="text-center">
-                            <Button className="bg-red-500 hover:bg-red-700">Report</Button>
+                            <Button disabled className="bg-red-500 hover:bg-red-700">
+                                Report
+                            </Button>
                         </TableCell>
                     </TableRow>
                 </TableBody>

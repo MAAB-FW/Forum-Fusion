@@ -1,19 +1,37 @@
+import { loadStripe } from "@stripe/stripe-js"
 import React from "react"
+import { FcOk } from "react-icons/fc"
+import { Elements } from "@stripe/react-stripe-js"
+import CheckoutForm from "./CheckoutForm"
+
+const stripePromise = loadStripe(import.meta.env.VITE_PUBLISHABLE_KEY)
 
 const Membership = () => {
-    const handlePayment = (e) => {
-        e.preventDefault()
-    }
+    const paymentFee = 20
+
     return (
         <div className="flex items-center justify-center py-20">
             <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
                 <div className="mb-6 text-center">
                     <h1 className="text-lg md:text-2xl font-semibold">Membership Payment</h1>
-                    <p className="text-sm md:text-base mt-2 text-gray-500">
-                        Became a <span className="bg-[#ffd700] text-black rounded-2xl px-1">Gold Badge</span> Member
+                    <p className="text-sm md:text-base mt-2 text-gray-500 flex flex-wrap justify-center gap-1">
+                        Became a{" "}
+                        <span className="bg-[#ffd700] flex items-center justify-center gap-1 w-32 text-black rounded-2xl px-1">
+                            <FcOk />
+                            Gold Badge
+                        </span>{" "}
+                        Member
                     </p>
+                    <div className="my-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Amount to Pay: <span className="text-pink-600">{paymentFee}$</span>
+                        </label>
+                    </div>
                 </div>
-                <form onSubmit={handlePayment}>
+                <Elements stripe={stripePromise}>
+                    <CheckoutForm paymentFee={paymentFee}></CheckoutForm>
+                </Elements>
+                {/* <form onSubmit={handlePayment}>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cardNumber">
                             Card Number
@@ -67,7 +85,7 @@ const Membership = () => {
                     >
                         Pay Now
                     </button>
-                </form>
+                </form> */}
             </div>
         </div>
     )

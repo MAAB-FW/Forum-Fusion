@@ -38,10 +38,10 @@ const MyPosts = () => {
     })
 
     const handleDeletePost = async (post) => {
-        console.log(post)
+        // console.log(post)
         try {
             const res = await axiosSecure.delete(`/deletePost/${post._id}`)
-            console.log(res.data)
+            // console.log(res.data)
             if (res.data.deletedCount > 0) toast.success("Post deleted successfully!")
             refetch()
         } catch (e) {
