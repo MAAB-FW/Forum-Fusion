@@ -67,7 +67,7 @@ const MyProfile = () => {
             </div>
 
             <div>
-                <h2 className="text-xl font-semibold mb-4">Recent Posts</h2>
+                <h2 className="text-xl font-semibold mb-4">Recent 3 Posts</h2>
                 {recentPosts.slice(0, 3).map((post) => (
                     <SinglePost key={post._id} post={post}></SinglePost>
                 ))}

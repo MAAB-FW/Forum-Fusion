@@ -70,6 +70,7 @@ const PostDetails = () => {
             postId: _id,
             commentTime: new Date(),
             commentAuthorName: user.displayName,
+            commentAuthorEmail: user.email,
             commentAuthorImage: user.photoURL,
         }
         console.log(commentData)
