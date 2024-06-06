@@ -17,12 +17,17 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import toast from "react-hot-toast"
 
 const MyPosts = () => {
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure()
 
-    const { data: myPosts, isFetching } = useQuery({
+    const {
+        data: myPosts,
+        isFetching,
+        refetch,
+    } = useQuery({
         queryKey: ["myPosts"],
         queryFn: async () => {
             const res = await axiosSecure(`/myPosts/${user.email}`)
@@ -32,8 +37,17 @@ const MyPosts = () => {
         initialData: [],
     })
 
-    const handleDeletePost = (post) => {
+    const handleDeletePost = async (post) => {
         console.log(post)
+        try {
+            const res = await axiosSecure.delete(`/deletePost/${post._id}`)
+            console.log(res.data)
+            if (res.data.deletedCount > 0) toast.success("Post deleted successfully!")
+            refetch()
+        } catch (e) {
+            console.log(e)
+            toast.error("Something went wrong!")
+        }
     }
 
     // console.log(myPosts[0])
