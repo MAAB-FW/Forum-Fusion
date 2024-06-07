@@ -8,6 +8,7 @@ import { useForm, Controller } from "react-hook-form"
 import toast from "react-hot-toast"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import Select from "react-select"
+import { CgSpinner } from "react-icons/cg"
 
 const AddPost = () => {
     const { user } = useAuth()
@@ -293,7 +294,7 @@ const AddPost = () => {
                             type="submit"
                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
-                            Post
+                            {posting ? <CgSpinner className="animate-spin text-xl w-8" /> : "Post"}
                         </button>
                     </div>
                 </div>

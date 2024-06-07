@@ -26,6 +26,7 @@ import {
 } from "react-share"
 import useAuth from "@/hooks/useAuth"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
+import { CgSpinner } from "react-icons/cg"
 
 const PostDetails = () => {
     const { id } = useParams()
@@ -33,6 +34,7 @@ const PostDetails = () => {
     const axiosPublic = useAxiosPublic()
     const axiosSecure = useAxiosSecure()
     const location = useLocation()
+    const [commenting, setCommenting] = useState(false)
 
     const { data: post, isFetching } = useQuery({
         queryKey: ["post"],
@@ -64,6 +66,7 @@ const PostDetails = () => {
 
     const handleComment = (e) => {
         e.preventDefault()
+        setCommenting(true)
         const comment = e.target.comment.value
         const commentData = {
             comment,
@@ -81,16 +84,19 @@ const PostDetails = () => {
                 if (res.data.result.insertedId) {
                     refetch()
                     e.target.reset()
+                    setCommenting(false)
                 }
             })
             .catch((e) => {
                 console.log(e)
+                setCommenting(false)
             })
     }
 
     if (isFetching) {
         return <SmallLoading />
     }
+
     return (
         <div className="bg-white shadow-md rounded-lg p-6 my-10">
             <div className="flex items-center mb-4">
@@ -213,10 +219,15 @@ const PostDetails = () => {
 
                                     <div className="w-full flex justify-end px-3">
                                         <button
+                                            disabled={commenting}
                                             type="submit"
                                             className="px-2.5 py-1.5 rounded-md text-white text-sm bg-indigo-500"
                                         >
-                                            Post Comment
+                                            {commenting ? (
+                                                <CgSpinner className="wf animate-spin text-xl w-[93px]" />
+                                            ) : (
+                                                "Post Comment"
+                                            )}
                                         </button>
                                     </div>
                                 </form>
