@@ -38,7 +38,7 @@ const MakeAnnouncement = () => {
             })
     }
     return (
-        <div className="pb-12">
+        <div className="min-h-screen pb-12">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Make Announcement</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="">

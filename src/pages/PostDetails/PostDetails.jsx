@@ -1,8 +1,8 @@
 import SmallLoading from "@/components/SmallLoading"
 import useAxiosPublic from "@/hooks/useAxiosPublic"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { LinkedinIcon } from "lucide-react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { FaArrowDown, FaArrowUp, FaComment, FaShare } from "react-icons/fa"
 import { Link, useLocation, useParams } from "react-router-dom"
 import {
@@ -35,34 +35,95 @@ const PostDetails = () => {
     const axiosSecure = useAxiosSecure()
     const location = useLocation()
     const [commenting, setCommenting] = useState(false)
+    const [isCommentOpen, setIsCommentOpen] = useState(false)
+    const [voteFetching, setVoteFetching] = useState(false)
 
     const { data: post, isFetching } = useQuery({
         queryKey: ["post"],
         queryFn: async () => {
             const res = await axiosPublic(`/post/${id}`)
-            // console.log(res.data)
+            console.log(res.data)
             return res.data
         },
         initialData: [],
     })
 
-    const { data: comments, refetch } = useQuery({
+    const { data: comments, refetch: commentRefetch } = useQuery({
         queryKey: ["comments"],
         enabled: !!user,
         queryFn: async () => {
             const res = await axiosSecure(`/comments/${id}`)
-            // console.log(res.data)
+            console.log(res.data)
             return res.data
         },
         initialData: [],
     })
-    // console.log(comments)
 
-    const { _id, tags, authorImage, authorName, downVote, postDescription, postTitle, upVote, postTime } = post
+    const { _id, tags, authorImage, authorName, postDescription, postTitle, postTime } = post
     const shareUrl = `${import.meta.env.VITE_API_URL}/post/${_id}`
-    // console.log(upVote, downVote)
 
-    const [isCommentOpen, setIsCommentOpen] = useState(false)
+    // const {
+    //     data: vote,
+    //     refetch: voteRefetch,
+    //     // isFetching: voteFetching,
+    // } = useQuery({
+    //     queryKey: ["getVote"],
+    //     enabled: !!user,
+    //     queryFn: async () => {
+    //         const res = await axiosSecure(`/getVote/${user.email}?postId=${_id}`)
+    //         console.log(res.data)
+    //         return res.data
+    //     },
+    //     initialData: {},
+    // })
+
+    const [vote, setVote] = useState({})
+    useEffect(() => {
+        const getVote = async () => {
+            const res = await axiosSecure(`/getVote/${user.email}?postId=${_id}`)
+            console.log(res.data)
+            setVote(res.data)
+        }
+        getVote()
+    }, [_id, axiosSecure, user.email])
+
+    const [upToggle, setUpToggle] = useState(vote?.upVote)
+    const [downToggle, setDownToggle] = useState(vote?.downVote)
+    // console.log(upToggle, downToggle)
+    useEffect(() => {
+        // setVoteFetching(true)
+        if (vote) {
+            setDownToggle(vote.downVote)
+            setUpToggle(vote.upVote)
+            // setVoteFetching(false)
+        }
+    }, [vote])
+
+    const { mutate } = useMutation({
+        mutationKey: ["updateVotes"],
+        mutationFn: ({ u, d }) => {
+            const voteData = {
+                upVote: u,
+                downVote: d,
+                voterEmail: user.email,
+                voteTime: new Date(),
+                postId: _id,
+                voteId: vote._id,
+            }
+            axiosSecure
+                .put("/updateVotes", voteData)
+                .then((res) => {
+                    console.log(res.data)
+                    if (res.data.upsertedCount || res.data.modifiedCount) {
+                        voteRefetch()
+                    }
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        },
+    })
+    console.log(vote)
 
     const handleComment = (e) => {
         e.preventDefault()
@@ -82,7 +143,7 @@ const PostDetails = () => {
             .then((res) => {
                 console.log(res.data)
                 if (res.data.result.insertedId) {
-                    refetch()
+                    commentRefetch()
                     e.target.reset()
                     setCommenting(false)
                 }
@@ -93,7 +154,21 @@ const PostDetails = () => {
             })
     }
 
-    if (isFetching) {
+    const handleVote = (e) => {
+        if (e === "up") {
+            setUpToggle(!upToggle)
+            setDownToggle(false)
+            // console.log("up")
+            mutate({ u: !upToggle, d: false })
+        } else {
+            setUpToggle(false)
+            setDownToggle(!downToggle)
+            // console.log("down")
+            mutate({ u: false, d: !downToggle })
+        }
+    }
+
+    if (isFetching || voteFetching) {
         return <SmallLoading />
     }
 
@@ -108,7 +183,7 @@ const PostDetails = () => {
             </div>
             <h2 className="text-xl font-bold mb-2">{postTitle}</h2>
             <p className="text-gray-700 mb-4">{postDescription}</p>
-            {tags.map((tag, idx) => (
+            {tags?.map((tag, idx) => (
                 <span
                     key={idx}
                     className="inline-block bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"
@@ -119,11 +194,23 @@ const PostDetails = () => {
             <hr className="mt-4" />
             <div className="flex flex-col md:flex-row gap-5 justify-between mt-4">
                 <div className="flex gap-10">
-                    <button disabled={!user} className="flex items-center mr-4 text-green-500 hover:text-green-700">
+                    <button
+                        onClick={() => handleVote("up")}
+                        disabled={!user}
+                        className={`flex  px-2 rounded-2xl py-1 items-center mr-4 text-green-500 ${
+                            upToggle && "bg-green-500 text-white"
+                        }`}
+                    >
                         <FaArrowUp className="mr-1" />
                         UpVote
                     </button>
-                    <button disabled={!user} className="flex items-center mr-4 text-red-500 hover:text-red-700">
+                    <button
+                        onClick={() => handleVote("down")}
+                        disabled={!user}
+                        className={`flex  px-2 rounded-2xl py-1 items-center mr-4 text-red-500 ${
+                            downToggle && "bg-red-500 text-white"
+                        }`}
+                    >
                         <FaArrowDown className="mr-1" />
                         DownVote
                     </button>

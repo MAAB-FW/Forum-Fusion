@@ -53,7 +53,7 @@ const ManageUsers = () => {
     if (isFetching) return <SmallLoading />
 
     return (
-        <div className="/min-h-[50vh] /pb-6">
+        <div className="min-h-screen pb-12">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Manage Users</h2>
             <div>
                 <div className="form relative my-4">

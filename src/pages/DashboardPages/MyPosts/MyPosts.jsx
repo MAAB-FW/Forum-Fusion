@@ -55,7 +55,7 @@ const MyPosts = () => {
     if (isFetching) return <SmallLoading />
 
     return (
-        <div className="/min-h-[50vh] pb-12">
+        <div className="min-h-screen pb-12">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">My Posts</h2>
             <div>
                 <Table>

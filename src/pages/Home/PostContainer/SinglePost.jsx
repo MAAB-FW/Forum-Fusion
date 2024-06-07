@@ -13,7 +13,7 @@ const SinglePost = ({ post }) => {
             className="my-6 flex flex-col border border-gray-300 rounded-lg p-4 shadow-md hover:bg-slate-100"
         >
             <div className="flex items-center mb-2">
-                <img src={authorImage} alt="Author" className="w-10 h-10 rounded-full mr-2" />
+                <img src={authorImage} alt="Author" className="w-10 h-10 object-cover rounded-full mr-2" />
                 <div className="flex flex-col md:flex-row gap-1 md:gap-4 items-start md:items-center justify-between w-full">
                     <h2 className="text-lg font-semibold">{postTitle}</h2>
                     <p className="mb-2 text-gray-500 text-sm">Posted: {new Date(postTime).toLocaleString()}</p>
