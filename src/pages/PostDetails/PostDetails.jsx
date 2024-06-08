@@ -231,8 +231,12 @@ const PostDetails = () => {
                 .put("/updateVotes", voteData)
                 .then((res) => {
                     console.log(res.data)
-                    if (res.data.upsertedId || res.data.insertedId) {
+                    if (res.data.result.upsertedId || res.data.result.insertedId) {
                         // voteRefetch()
+                        // console.log(res.data.result)
+                    }
+                    if (res.data.postVoteUpdate) {
+                        // console.log(res.data.postVoteUpdate)
                     }
                 })
                 .catch((e) => {
