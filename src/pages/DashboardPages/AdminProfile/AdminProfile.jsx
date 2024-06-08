@@ -6,17 +6,28 @@ import { FaUsers } from "react-icons/fa"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
 import toast from "react-hot-toast"
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts"
+import { useQuery } from "@tanstack/react-query"
+import SmallLoading from "@/components/SmallLoading"
 
 const AdminProfile = () => {
     const { user } = useAuth()
     const [tag, setTag] = useState("")
     const axiosSecure = useAxiosSecure()
 
+    const { data: totalData, isFetching } = useQuery({
+        queryKey: ["totalData"],
+        queryFn: async () => {
+            const res = await axiosSecure("/totalData")
+            console.log(res.data)
+            return res.data
+        },
+        initialData: {},
+    })
     //TODO: dynamic data
     const data = [
-        { name: "Total Posts", value: 400 },
-        { name: "Total Comments", value: 300 },
-        { name: "Total Users", value: 300 },
+        { name: "Total Posts", value: totalData.totalPosts },
+        { name: "Total Comments", value: totalData.totalComments },
+        { name: "Total Users", value: totalData.totalUsers },
     ]
     const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]
 
@@ -51,6 +62,10 @@ const AdminProfile = () => {
         }
     }
 
+    if (isFetching) {
+        return <SmallLoading />
+    }
+
     return (
         <div className="/min-h-[50vh] /pb-6">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Admin Profile</h2>
@@ -81,7 +96,7 @@ const AdminProfile = () => {
                                         <dl>
                                             <dt className="text-sm font-medium text-gray-500 truncate">Total Posts</dt>
                                             <dd>
-                                                <div className="text-lg font-medium text-gray-900">550</div>
+                                                <div className="text-lg font-medium text-gray-900">{totalData.totalPosts}</div>
                                                 <div className="text-sm text-green-500 flex items-center"></div>
                                             </dd>
                                         </dl>
@@ -100,7 +115,7 @@ const AdminProfile = () => {
                                         <dl>
                                             <dt className="text-sm font-medium text-gray-500 truncate">Total Comments</dt>
                                             <dd>
-                                                <div className="text-lg font-medium text-gray-900">9,056</div>
+                                                <div className="text-lg font-medium text-gray-900">{totalData.totalComments}</div>
                                                 <div className="text-sm text-green-500 flex items-center"></div>
                                             </dd>
                                         </dl>
@@ -118,7 +133,7 @@ const AdminProfile = () => {
                                         <dl>
                                             <dt className="text-sm font-medium text-gray-500 truncate">Total Users</dt>
                                             <dd>
-                                                <div className="text-lg font-medium text-gray-900">107</div>
+                                                <div className="text-lg font-medium text-gray-900">{totalData.totalUsers}</div>
                                                 <div className="text-sm text-green-500 flex items-center"></div>
                                             </dd>
                                         </dl>
