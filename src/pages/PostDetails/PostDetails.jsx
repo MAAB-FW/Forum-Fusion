@@ -65,12 +65,12 @@ const PostDetails = () => {
     // const {
     //     data: vote,
     //     refetch: voteRefetch,
-    //     // isFetching: voteFetching,
+    //     isFetching: voteFetching,
     // } = useQuery({
     //     queryKey: ["getVote"],
     //     enabled: !!user,
     //     queryFn: async () => {
-    //         const res = await axiosSecure(`/getVote/${user.email}?postId=${_id}`)
+    //         const res = await axiosSecure(`/getVote/${_id}`)
     //         console.log(res.data)
     //         return res.data
     //     },
@@ -79,23 +79,25 @@ const PostDetails = () => {
 
     const [vote, setVote] = useState({})
     useEffect(() => {
-        const getVote = async () => {
-            const res = await axiosSecure(`/getVote/${user.email}?postId=${_id}`)
-            console.log(res.data)
-            setVote(res.data)
+        if (user) {
+            const getVote = async () => {
+                const res = await axiosSecure(`/getVote/${_id}`)
+                console.log(res.data)
+                setVote(res.data)
+            }
+            getVote()
         }
-        getVote()
-    }, [_id, axiosSecure, user.email])
+    }, [_id, axiosSecure, user])
 
     const [upToggle, setUpToggle] = useState(vote?.upVote)
     const [downToggle, setDownToggle] = useState(vote?.downVote)
     // console.log(upToggle, downToggle)
     useEffect(() => {
-        // setVoteFetching(true)
+        setVoteFetching(true)
         if (vote) {
             setDownToggle(vote.downVote)
             setUpToggle(vote.upVote)
-            // setVoteFetching(false)
+            setVoteFetching(false)
         }
     }, [vote])
 
@@ -115,7 +117,7 @@ const PostDetails = () => {
                 .then((res) => {
                     console.log(res.data)
                     if (res.data.upsertedCount || res.data.modifiedCount) {
-                        voteRefetch()
+                        // voteRefetch()
                     }
                 })
                 .catch((e) => {
@@ -175,7 +177,7 @@ const PostDetails = () => {
     return (
         <div className="bg-white shadow-md rounded-lg p-6 my-10">
             <div className="flex items-center mb-4">
-                <img src={authorImage} alt={authorName} className="w-10 h-10 rounded-full mr-4" />
+                <img src={authorImage} alt={authorName} className="w-10 h-10 object-cover rounded-full mr-4" />
                 <div>
                     <p className="text-lg font-semibold">{authorName}</p>
                     <p className="text-sm text-gray-600">{new Date(postTime).toLocaleString()}</p>
@@ -198,7 +200,7 @@ const PostDetails = () => {
                         onClick={() => handleVote("up")}
                         disabled={!user}
                         className={`flex  px-2 rounded-2xl py-1 items-center mr-4 text-green-500 ${
-                            upToggle && "bg-green-500 text-white"
+                            user && upToggle && "bg-green-500 text-white"
                         }`}
                     >
                         <FaArrowUp className="mr-1" />
@@ -208,7 +210,7 @@ const PostDetails = () => {
                         onClick={() => handleVote("down")}
                         disabled={!user}
                         className={`flex  px-2 rounded-2xl py-1 items-center mr-4 text-red-500 ${
-                            downToggle && "bg-red-500 text-white"
+                            user && downToggle && "bg-red-500 text-white"
                         }`}
                     >
                         <FaArrowDown className="mr-1" />
