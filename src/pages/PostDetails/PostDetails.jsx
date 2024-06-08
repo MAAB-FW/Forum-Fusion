@@ -38,6 +38,7 @@ const PostDetails = () => {
     const [isCommentOpen, setIsCommentOpen] = useState(false)
     const [voteFetching, setVoteFetching] = useState(false)
     const [post, setPost] = useState({})
+    const [reload, setReload] = useState(false)
     // const [isFetching, setIsFetching] = useState(true)
 
     // const { data: post, isFetching } = useQuery({
@@ -65,7 +66,7 @@ const PostDetails = () => {
             .catch((e) => {
                 console.log(e)
             })
-    }, [axiosPublic, axiosSecure, id])
+    }, [axiosPublic, axiosSecure, id, reload])
 
     const { data: comments, refetch: commentRefetch } = useQuery({
         queryKey: ["comments"],
@@ -190,6 +191,7 @@ const PostDetails = () => {
         const commentData = {
             comment,
             postId: _id,
+            postTitle: postTitle,
             commentTime: new Date(),
             commentAuthorName: user.displayName,
             commentAuthorEmail: user.email,
@@ -231,6 +233,7 @@ const PostDetails = () => {
                 .put("/updateVotes", voteData)
                 .then((res) => {
                     console.log(res.data)
+                    setReload(!reload)
                     if (res.data.result.upsertedId || res.data.result.insertedId) {
                         // voteRefetch()
                         // console.log(res.data.result)
@@ -260,6 +263,7 @@ const PostDetails = () => {
                 .put("/updateVotes", voteData)
                 .then((res) => {
                     console.log(res.data)
+                    setReload(!reload)
                     if (res.data.upsertedId || res.data.insertedId) {
                         // voteRefetch()
                     }
