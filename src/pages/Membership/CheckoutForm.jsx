@@ -7,6 +7,7 @@ import PropTypes from "prop-types"
 import { useLocation, useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { CgSpinner } from "react-icons/cg"
 
 const CheckoutForm = ({ paymentFee, refetch }) => {
     const stripe = useStripe()
@@ -17,6 +18,7 @@ const CheckoutForm = ({ paymentFee, refetch }) => {
     const location = useLocation()
     const navigate = useNavigate()
     const queryClient = useQueryClient()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         axiosSecure
@@ -63,13 +65,14 @@ const CheckoutForm = ({ paymentFee, refetch }) => {
         if (card == null) {
             return
         }
-
+        setLoading(true)
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: "card",
             card,
         })
 
         if (error) {
+            setLoading(false)
             console.log("[error]", error)
         } else {
             console.log("[PaymentMethod]", paymentMethod)
@@ -85,10 +88,12 @@ const CheckoutForm = ({ paymentFee, refetch }) => {
             },
         })
         if (cardError) {
+            setLoading(false)
             console.log("card Error")
         } else {
             console.log("payment intent", paymentIntent)
             if (paymentIntent.status === "succeeded") {
+                setLoading(false)
                 mutate()
             }
         }
@@ -111,8 +116,8 @@ const CheckoutForm = ({ paymentFee, refetch }) => {
                     },
                 }}
             />
-            <Button type="submit" disabled={!stripe || !clientSecret} className="my-5 w-full">
-                Pay
+            <Button type="submit" disabled={!stripe || !clientSecret || loading} className="my-5 w-full">
+                {loading ? <CgSpinner className="animate-spin text-xl w-8" /> : "Pay"}
             </Button>
         </form>
     )
