@@ -15,7 +15,6 @@ import { Badge } from "@/components/ui/badge"
 import { useQuery } from "@tanstack/react-query"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
 import toast from "react-hot-toast"
-import SmallLoading from "@/components/SmallLoading"
 
 const ManageUsers = () => {
     const axiosSecure = useAxiosSecure()
@@ -24,7 +23,6 @@ const ManageUsers = () => {
     const {
         data: users,
         refetch,
-        isFetching,
     } = useQuery({
         queryKey: ["manageUsers", search],
         queryFn: async () => {
@@ -49,8 +47,6 @@ const ManageUsers = () => {
                 toast.error("Something went wrong!")
             })
     }
-
-    if (isFetching) return <SmallLoading />
 
     return (
         <div className="min-h-screen pb-12">
