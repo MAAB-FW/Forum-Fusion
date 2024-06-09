@@ -52,7 +52,6 @@ const MyPosts = () => {
     }
 
     // console.log(myPosts[0])
-    if (isFetching) return <SmallLoading />
 
     return (
         <div className="min-h-screen pb-12">
@@ -70,44 +69,58 @@ const MyPosts = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {myPosts.map((post) => (
-                            <TableRow key={post._id}>
-                                <TableCell className="font-medium min-w-52">{post.postTitle}</TableCell>
-                                <TableCell className="text-center">{post.upVote}</TableCell>
-                                <TableCell className="text-right">
-                                    <Button>
-                                        <Link to={`/comments/${post._id}`}>Comment</Link>
-                                    </Button>
-                                </TableCell>
-                                <TableCell>
-                                    <AlertDialog>
-                                        <AlertDialogTrigger>
-                                            <span className="bg-red-500 hover:bg-red-700 font-medium text-white rounded px-4 py-2.5">
-                                                Delete
-                                            </span>
-                                            {/* <Button>Make admin</Button> */}
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    This action will make the user an admin.
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                <AlertDialogAction
-                                                    onClick={() => handleDeletePost(post)}
-                                                    className="bg-green-600 hover:bg-green-800"
-                                                >
-                                                    <span>Confirm</span>
-                                                </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
+                        {isFetching ? (
+                            <TableRow>
+                                <TableCell colSpan="4" className="">
+                                    <SmallLoading></SmallLoading>
                                 </TableCell>
                             </TableRow>
-                        ))}
+                        ) : (
+                            <>
+                                {myPosts.map((post) => (
+                                    <TableRow key={post._id}>
+                                        <TableCell className="font-medium min-w-52">{post.postTitle}</TableCell>
+                                        <TableCell className="text-center">{post.upVote}</TableCell>
+                                        <TableCell className="text-right">
+                                            <Link
+                                                to={`/comments/${post._id}`}
+                                                type="button"
+                                                className="inline-block px-6 py-3 mr-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-purple-700 to-pink-500 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-110 hover:rotate-2 hover:bg-pink-700   hover:shadow-lg active:opacity-85"
+                                            >
+                                                Comment
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell>
+                                            <AlertDialog>
+                                                <AlertDialogTrigger>
+                                                    <span className="bg-red-500 hover:bg-red-700 font-medium text-white rounded px-4 py-2.5">
+                                                        Delete
+                                                    </span>
+                                                    {/* <Button>Make admin</Button> */}
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            This action will delete the post.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() => handleDeletePost(post)}
+                                                            className="bg-green-600 hover:bg-green-800"
+                                                        >
+                                                            <span>Confirm</span>
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </>
+                        )}
                     </TableBody>
                 </Table>
             </div>

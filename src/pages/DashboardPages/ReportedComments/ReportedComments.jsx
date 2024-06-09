@@ -11,15 +11,47 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import useAuth from "@/hooks/useAuth"
-import { comment } from "postcss"
 import { Link } from "react-router-dom"
-import { Button } from "@/components/ui/button"
+import useAxiosSecure from "@/hooks/useAxiosSecure"
+import { useQuery } from "@tanstack/react-query"
+import Swal from "sweetalert2"
+import toast from "react-hot-toast"
+import SmallLoading from "@/components/SmallLoading"
 
 const ReportedComments = () => {
-    const { user } = useAuth()
-    const handleDeleteComment = (comment) => {}
-    const post = []
+    const axiosSecure = useAxiosSecure()
+    const {
+        data: comments,
+        refetch,
+        isFetching,
+    } = useQuery({
+        queryKey: ["reportedComments"],
+        queryFn: async () => {
+            const res = await axiosSecure(`/reportedComments`)
+            return res.data
+        },
+        initialData: [],
+    })
+    console.log(comments)
+    const handleDeleteComment = async (comment) => {
+        try {
+            const res = await axiosSecure.delete(`/deleteReportedComment/${comment._id}`)
+            console.log(res.data)
+            if (res.data.deletedCount > 0) toast.success("comment deleted successfully!")
+            refetch()
+        } catch (e) {
+            console.log(e)
+            toast.error("Something went wrong!")
+        }
+    }
+
+    const readMore = (comment) => {
+        Swal.fire({
+            text: comment,
+            confirmButtonText: "Cancel",
+        })
+    }
+
     return (
         <div className="min-h-screen pb-12">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Reported Comments</h2>
@@ -28,51 +60,79 @@ const ReportedComments = () => {
                     <TableCaption>A list all of your posts.</TableCaption>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="pr-0">Comment</TableHead>
+                            <TableHead className="pr-0">Reported Comment</TableHead>
                             <TableHead className="w-[100px] whitespace-nowrap">Report/Feedback</TableHead>
                             <TableHead className="text-center">Post Link</TableHead>
                             <TableHead className="text-center">Action</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {/* {myPosts.map((post) => ( */}
-                        <TableRow key={post._id}>
-                            <TableCell className="font-medium min-w-52">{post.postTitle}</TableCell>
-                            <TableCell className="text-center">{post.upVote}</TableCell>
-                            <TableCell className="text-center">
-                                <Button>
-                                    <Link to={`/comments/${post._id}`}>Post Link</Link>
-                                </Button>
-                            </TableCell>
-                            <TableCell>
-                                <AlertDialog>
-                                    <AlertDialogTrigger>
-                                        <span className="bg-red-500 hover:bg-red-700 font-medium text-white rounded px-4 py-2.5">
-                                            Delete
-                                        </span>
-                                        {/* <Button>Make admin</Button> */}
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                This action will make the user an admin.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction
-                                                onClick={() => handleDeleteComment(comment)}
-                                                className="bg-green-600 hover:bg-green-800"
+                        {isFetching ? (
+                            <TableRow>
+                                <TableCell colSpan="4" className="">
+                                    <SmallLoading></SmallLoading>
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            <>
+                                {comments.map((comment) => (
+                                    <TableRow key={comment._id}>
+                                        <TableCell className="font-medium min-w-52 ">
+                                            {comment.comment.slice(0, 20)}
+                                            {comment.comment.length > 20 && (
+                                                <>
+                                                    ...
+                                                    <button
+                                                        onClick={() => readMore(comment.comment)}
+                                                        className="text-blue-700 hover:underline"
+                                                    >
+                                                        ReadMore
+                                                    </button>
+                                                </>
+                                            )}
+                                        </TableCell>
+                                        <TableCell className="text-center">{comment.report}</TableCell>
+                                        <TableCell className="text-center">
+                                            {/* <Button> */}
+                                            <Link
+                                                className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                                                to={`/post/${comment?.postId}`}
                                             >
-                                                <span>Confirm</span>
-                                            </AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                            </TableCell>
-                        </TableRow>
-                        {/* ))} */}
+                                                Post Link
+                                            </Link>
+                                            {/* </Button> */}
+                                        </TableCell>
+                                        <TableCell className="text-center">
+                                            <AlertDialog>
+                                                <AlertDialogTrigger>
+                                                    <span className="bg-red-500 hover:bg-red-700 font-medium text-white rounded px-4 py-2.5">
+                                                        Delete
+                                                    </span>
+                                                    {/* <Button>Make admin</Button> */}
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            This action will delete the reported comment.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() => handleDeleteComment(comment)}
+                                                            className="bg-green-600 hover:bg-green-800"
+                                                        >
+                                                            <span>Confirm</span>
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </>
+                        )}
                     </TableBody>
                 </Table>
             </div>

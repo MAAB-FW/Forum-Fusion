@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge"
 import { useQuery } from "@tanstack/react-query"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
 import toast from "react-hot-toast"
+import SmallLoading from "@/components/SmallLoading"
 
 const ManageUsers = () => {
     const axiosSecure = useAxiosSecure()
@@ -23,6 +24,7 @@ const ManageUsers = () => {
     const {
         data: users,
         refetch,
+        isFetching,
     } = useQuery({
         queryKey: ["manageUsers", search],
         queryFn: async () => {
@@ -47,7 +49,7 @@ const ManageUsers = () => {
                 toast.error("Something went wrong!")
             })
     }
-
+    console.log(isFetching)
     return (
         <div className="min-h-screen pb-12">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Manage Users</h2>
@@ -111,52 +113,62 @@ const ManageUsers = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {users.map((user) => (
-                        <TableRow key={user._id}>
-                            <TableCell className="font-medium min-w-52">{user.userName}</TableCell>
-                            <TableCell className="">{user.email}</TableCell>
-                            <TableCell className="text-center">
-                                {user.role === "admin" ? (
-                                    <Badge variant="destructive">Admin</Badge>
-                                ) : (
-                                    <AlertDialog>
-                                        <AlertDialogTrigger>
-                                            <span className="px-4 py-2.5 rounded bg-slate-950 hover:bg-slate-800 whitespace-nowrap font-medium text-white">
-                                                Make admin
-                                            </span>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    This action will make the user an admin.
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                <AlertDialogAction
-                                                    onClick={() => handleMakeAdmin(user)}
-                                                    className="bg-green-600 hover:bg-green-800"
-                                                >
-                                                    <span>Confirm</span>
-                                                </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                )}
-                            </TableCell>
-                            <TableCell className={`text-center uppercase `}>
-                                <Badge
-                                    variant="secondary"
-                                    className={`bg-[#c77b30] hover:bg-[#fdb267] ${
-                                        user.badge === "gold" && "bg-[#ffd700] hover:bg-[#ffe762]"
-                                    }`}
-                                >
-                                    {user.badge}
-                                </Badge>
+                    {isFetching ? (
+                        <TableRow>
+                            <TableCell colSpan="4" className="">
+                                <SmallLoading></SmallLoading>
                             </TableCell>
                         </TableRow>
-                    ))}
+                    ) : (
+                        <>
+                            {users.map((user) => (
+                                <TableRow key={user._id}>
+                                    <TableCell className="font-medium min-w-52">{user.userName}</TableCell>
+                                    <TableCell className="">{user.email}</TableCell>
+                                    <TableCell className="text-center">
+                                        {user.role === "admin" ? (
+                                            <Badge variant="destructive">Admin</Badge>
+                                        ) : (
+                                            <AlertDialog>
+                                                <AlertDialogTrigger>
+                                                    <span className="px-4 py-2.5 rounded bg-slate-950 hover:bg-slate-800 whitespace-nowrap font-medium text-white">
+                                                        Make admin
+                                                    </span>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            This action will make the user an admin.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() => handleMakeAdmin(user)}
+                                                            className="bg-green-600 hover:bg-green-800"
+                                                        >
+                                                            <span>Confirm</span>
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        )}
+                                    </TableCell>
+                                    <TableCell className={`text-center uppercase `}>
+                                        <Badge
+                                            variant="secondary"
+                                            className={`bg-[#c77b30] hover:bg-[#fdb267] ${
+                                                user.badge === "gold" && "bg-[#ffd700] hover:bg-[#ffe762]"
+                                            }`}
+                                        >
+                                            {user.badge}
+                                        </Badge>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </>
+                    )}
                 </TableBody>
             </Table>
         </div>
