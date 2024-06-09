@@ -24,9 +24,9 @@ const PostContainer = () => {
     const { count } = data
 
     const { data: posts, isFetching } = useQuery({
-        queryKey: ["posts", currentPage],
+        queryKey: ["posts", currentPage, popularity],
         queryFn: async () => {
-            const res = await axiosPublic(`/posts?size=${itemPerPage}&page=${currentPage}`)
+            const res = await axiosPublic(`/posts?size=${itemPerPage}&page=${currentPage}&popularity=${popularity}`)
             // console.log(res.data)
             return res.data
         },
@@ -41,7 +41,14 @@ const PostContainer = () => {
         <div className="mb-12">
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold">All Posts:</h2>
-                <Button onClick={() => setPopularity(true)}>Sort by Popularity</Button>
+                <Button
+                    className={` ${popularity ? "bg-red-600 hover:bg-gray-700" : "hover:bg-red-700"}`}
+                    onClick={() => {
+                        setPopularity(!popularity)
+                    }}
+                >
+                    Sort by Popularity
+                </Button>
             </div>
             <div className="my-10 ">
                 {posts.map((post) => (

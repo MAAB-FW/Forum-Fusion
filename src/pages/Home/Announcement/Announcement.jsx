@@ -29,7 +29,7 @@ const Announcement = () => {
                         <div className="notiborderglow"></div>
                         <div className="notititle ">
                             <h1 className="text-2xl text-slate-50 mb-2 flex items-center gap-2">
-                                <HiSpeakerphone className="text-xl text-red-500"></HiSpeakerphone>
+                            <HiSpeakerphone className="text-6xl md:text-xl text-red-500"></HiSpeakerphone>
                                 {item.title}
                             </h1>
                             <div className="flex items-center gap-4">
