@@ -16,19 +16,33 @@ import { useQuery } from "@tanstack/react-query"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
 import toast from "react-hot-toast"
 import SmallLoading from "@/components/SmallLoading"
+import Pagination from "@/components/Pagination"
 
 const ManageUsers = () => {
     const axiosSecure = useAxiosSecure()
     const [search, setSearch] = useState("")
-
+    const [currentPage, setCurrentPage] = useState(0)
+    const itemPerPage = 5
+    const { data, isFetching: isFetching2 } = useQuery({
+        queryKey: ["totalData"],
+        queryFn: async () => {
+            const res = await axiosSecure(`/totalData`)
+            // console.log(res.data)
+            return res.data
+        },
+        initialData: {},
+    })
+    const { totalUsers: count } = data
+console.log(data);
     const {
         data: users,
         refetch,
         isFetching,
     } = useQuery({
-        queryKey: ["manageUsers", search],
+        queryKey: ["manageUsers", search, currentPage],
+        enabled: !!data,
         queryFn: async () => {
-            const res = await axiosSecure(`/users?search=${search}`)
+            const res = await axiosSecure(`/manageUsers?search=${search}&size=${itemPerPage}&page=${currentPage}`)
             return res.data
         },
         initialData: [],
@@ -49,7 +63,7 @@ const ManageUsers = () => {
                 toast.error("Something went wrong!")
             })
     }
-    console.log(isFetching)
+
     return (
         <div className="min-h-screen pb-12">
             <h2 className="text-xl mb-6 font-semibold leading-7 text-gray-900">Manage Users</h2>
@@ -113,7 +127,7 @@ const ManageUsers = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {isFetching ? (
+                    {isFetching || isFetching2 ? (
                         <TableRow>
                             <TableCell colSpan="4" className="">
                                 <SmallLoading></SmallLoading>
@@ -171,6 +185,12 @@ const ManageUsers = () => {
                     )}
                 </TableBody>
             </Table>
+            <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                count={count}
+                itemPerPage={itemPerPage}
+            ></Pagination>
         </div>
     )
 }

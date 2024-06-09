@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
     AlertDialog,
@@ -17,17 +17,31 @@ import { useQuery } from "@tanstack/react-query"
 import Swal from "sweetalert2"
 import toast from "react-hot-toast"
 import SmallLoading from "@/components/SmallLoading"
+import Pagination from "@/components/Pagination"
 
 const ReportedComments = () => {
     const axiosSecure = useAxiosSecure()
+    const [currentPage, setCurrentPage] = useState(0)
+    const itemPerPage = 5
+    const { data, isFetching: isFetching2 } = useQuery({
+        queryKey: ["totalData"],
+        queryFn: async () => {
+            const res = await axiosSecure(`/totalData`)
+            // console.log(res.data)
+            return res.data
+        },
+        initialData: {},
+    })
+    const { totalReports: count } = data
+
     const {
         data: comments,
         refetch,
         isFetching,
     } = useQuery({
-        queryKey: ["reportedComments"],
+        queryKey: ["reportedComments", currentPage],
         queryFn: async () => {
-            const res = await axiosSecure(`/reportedComments`)
+            const res = await axiosSecure(`/reportedComments?size=${itemPerPage}&page=${currentPage}`)
             return res.data
         },
         initialData: [],
@@ -67,7 +81,7 @@ const ReportedComments = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {isFetching ? (
+                        {isFetching || isFetching2 ? (
                             <TableRow>
                                 <TableCell colSpan="4" className="">
                                     <SmallLoading></SmallLoading>
@@ -136,6 +150,12 @@ const ReportedComments = () => {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                count={count}
+                itemPerPage={itemPerPage}
+            ></Pagination>
         </div>
     )
 }

@@ -2,7 +2,7 @@ import React from "react"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 import PropTypes from "prop-types"
 
-const Pagination = ({ currentPage, setCurrentPage, count, itemPerPage }) => {
+const Pagination = ({ currentPage, setCurrentPage, count = 1, itemPerPage }) => {
     const numberOfPages = Math.ceil(count / itemPerPage)
     const pages = [...Array(numberOfPages).keys()]
 
