@@ -2,8 +2,9 @@ import SectionTitle from "@/components/SectionTitle"
 import useAxiosPublic from "@/hooks/useAxiosPublic"
 import { useQuery } from "@tanstack/react-query"
 import React from "react"
+import PropTypes from "prop-types"
 
-const AllTags = () => {
+const AllTags = ({ setText, bannerRef }) => {
     const axiosPublic = useAxiosPublic()
     const { data } = useQuery({
         queryKey: ["tags"],
@@ -17,9 +18,14 @@ const AllTags = () => {
     return (
         <div>
             <SectionTitle title="AllTags"></SectionTitle>
+            <p className="text-center my-5 text-gray-500">Use tags for search posts. (must click search button)</p>
             <div className=" text-center *:m-4 my-10 md:w-3/4 mx-auto">
                 {data.map((item) => (
                     <button
+                        onClick={() => {
+                            setText(item.tag)
+                            bannerRef.current.scrollIntoView({ behavior: "smooth" })
+                        }}
                         key={item._id}
                         className="inline-flex items-center rounded-full border-2 border-muted-1 bg-muted-1 px-2 py-1 text-base font-semibold text-heading shadow-sm"
                     >
@@ -35,3 +41,8 @@ const AllTags = () => {
 }
 
 export default AllTags
+
+AllTags.propTypes = {
+    setText: PropTypes.func,
+    bannerRef: PropTypes.object,
+}

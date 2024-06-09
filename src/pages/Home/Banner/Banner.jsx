@@ -1,20 +1,12 @@
-import useAxiosPublic from "@/hooks/useAxiosPublic"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import SinglePost from "../PostContainer/SinglePost"
+import PropTypes from "prop-types"
 
-const Banner = () => {
-    const axiosPublic = useAxiosPublic()
-    const [searchOutput, setSearchOutput] = useState([])
-    const [text, setText] = useState("")
-    const handleSearch = (e) => {
-        e.preventDefault()
-        if (text) {
-            axiosPublic(`/bannerSearch?q=${text}`).then((res) => {
-                console.log(res.data)
-                setSearchOutput(res.data)
-            })
-        }
-    }
+const Banner = ({ text, setText, searchOutput, setSearchOutput, handleSearch, bannerRef }) => {
+    const handleClear = useCallback(() => {
+        setSearchOutput([])
+    }, [setSearchOutput])
+
     useEffect(() => {
         const handleKey = (e) => {
             if (e.key === "Escape") {
@@ -22,11 +14,8 @@ const Banner = () => {
             }
         }
         document.addEventListener("keydown", handleKey)
-    }, [])
+    }, [handleClear])
 
-    const handleClear = () => {
-        setSearchOutput([])
-    }
     return (
         <div className="md:-ml-[8.8%] md:-mr-[8.8%] -ml-[5.5%] -mr-[5.5%] relative overflow-hidden">
             <div>
@@ -39,7 +28,7 @@ const Banner = () => {
                 </svg>
             </div>
             <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 -mt-24 lg:-mt-56 md:mb-14">
-                <div className="relative isolate  px-6 py-20 text-center sm:px-16">
+                <div ref={bannerRef} className="relative isolate  px-6 py-20 text-center sm:px-16">
                     <p className="mx-auto max-w-lg text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                         Did not find post you were looking for?
                     </p>
@@ -51,7 +40,7 @@ const Banner = () => {
                         >
                             <input
                                 id="search-bar"
-                                placeholder="your keyword here"
+                                placeholder="Type tagname and click search button..."
                                 name="q"
                                 value={text}
                                 onChange={(e) => setText(e.target.value)}
@@ -75,13 +64,14 @@ const Banner = () => {
                             </span>
                         </div>
                     </form>
-                    <div hidden={searchOutput.length === 0} className="shadow-2xl mt-5 px-12 py-5 rounded-3xl">
+                    <div hidden={searchOutput.length === 0} className="shadow-2xl mt-5 px-4 md:px-12 py-5 rounded-3xl">
                         <div className="flex justify-end">
                             <button
                                 onClick={handleClear}
-                                className="bg-white border font-bold border-gray-300 rounded-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 focus:outline-none transition"
+                                className="bg-white flex gap-1 border font-bold border-gray-300 rounded-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 focus:outline-none transition"
                             >
-                                Esc
+                                <span className="hidden lg:flex">Esc /</span>
+                                <span>Clear</span>
                             </button>
                         </div>
                         {searchOutput?.map((post) => (
@@ -143,3 +133,12 @@ const Banner = () => {
 }
 
 export default Banner
+
+Banner.propTypes = {
+    text: PropTypes.string,
+    setText: PropTypes.func,
+    searchOutput: PropTypes.array,
+    setSearchOutput: PropTypes.func,
+    handleSearch: PropTypes.func,
+    bannerRef: PropTypes.object,
+}
