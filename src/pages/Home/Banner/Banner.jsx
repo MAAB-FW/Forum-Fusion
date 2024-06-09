@@ -1,6 +1,32 @@
-import React from "react"
+import useAxiosPublic from "@/hooks/useAxiosPublic"
+import React, { useEffect, useState } from "react"
+import SinglePost from "../PostContainer/SinglePost"
 
 const Banner = () => {
+    const axiosPublic = useAxiosPublic()
+    const [searchOutput, setSearchOutput] = useState([])
+    const [text, setText] = useState("")
+    const handleSearch = (e) => {
+        e.preventDefault()
+        if (text) {
+            axiosPublic(`/bannerSearch?q=${text}`).then((res) => {
+                console.log(res.data)
+                setSearchOutput(res.data)
+            })
+        }
+    }
+    useEffect(() => {
+        const handleKey = (e) => {
+            if (e.key === "Escape") {
+                handleClear()
+            }
+        }
+        document.addEventListener("keydown", handleKey)
+    }, [])
+
+    const handleClear = () => {
+        setSearchOutput([])
+    }
     return (
         <div className="md:-ml-[8.8%] md:-mr-[8.8%] -ml-[5.5%] -mr-[5.5%] relative overflow-hidden">
             <div>
@@ -18,7 +44,7 @@ const Banner = () => {
                         Did not find post you were looking for?
                     </p>
 
-                    <form>
+                    <form onSubmit={handleSearch}>
                         <label
                             className="mx-auto mt-8 relative bg-white min-w-sm max-w-2xl flex flex-col md:flex-row items-center justify-center border py-2 px-2 rounded-2xl gap-2 shadow-2xl focus-within:border-gray-300"
                             htmlFor="search-bar"
@@ -27,6 +53,8 @@ const Banner = () => {
                                 id="search-bar"
                                 placeholder="your keyword here"
                                 name="q"
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
                                 className="px-6 py-2 w-full rounded-md flex-1 outline-none bg-white"
                                 required=""
                             />
@@ -47,6 +75,20 @@ const Banner = () => {
                             </span>
                         </div>
                     </form>
+                    <div hidden={searchOutput.length === 0} className="shadow-2xl mt-5 px-12 py-5 rounded-3xl">
+                        <div className="flex justify-end">
+                            <button
+                                onClick={handleClear}
+                                className="bg-white border font-bold border-gray-300 rounded-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 active:bg-gray-200 focus:outline-none transition"
+                            >
+                                Esc
+                            </button>
+                        </div>
+                        {searchOutput?.map((post) => (
+                            <SinglePost key={post._id} post={post}></SinglePost>
+                        ))}
+                    </div>
+
                     {/* <div className="mt-10">
                          <div className="notification !w-full !h-full my-4">
                     <div className="notiglow"></div>
