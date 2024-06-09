@@ -35,7 +35,7 @@ const ReportedComments = () => {
     console.log(comments)
     const handleDeleteComment = async (comment) => {
         try {
-            const res = await axiosSecure.delete(`/deleteReportedComment/${comment._id}`)
+            const res = await axiosSecure.delete(`/deleteReportedComment/${comment._id}?postId=${comment.postId}`)
             console.log(res.data)
             if (res.data.deletedCount > 0) toast.success("comment deleted successfully!")
             refetch()
