@@ -36,43 +36,58 @@ const PostDetails = () => {
     const location = useLocation()
     const [commenting, setCommenting] = useState(false)
     const [isCommentOpen, setIsCommentOpen] = useState(false)
-    const [voteFetching, setVoteFetching] = useState(false)
-    const [post, setPost] = useState({})
+    // const [voteFetching, setVoteFetching] = useState(false)
+    // const [post, setPost] = useState({})
     const [reload, setReload] = useState(false)
     // const [isFetching, setIsFetching] = useState(true)
 
-    // const { data: post, isFetching } = useQuery({
-    //     queryKey: ["post"],
-    //     queryFn: async () => {
-    //         const res = await axiosPublic(`/post/${id}`)
-    //         // console.log(res.data)
-    //         return res.data
-    //     },
-    //     initialData: {},
-    // })
+    const { data: post, isFetching } = useQuery({
+        queryKey: ["post"],
+        queryFn: async () => {
+            const res = await axiosPublic(`/post/${id}`)
+            // console.log(res.data)
+            return res.data
+        },
+        initialData: {},
+    })
 
-    useEffect(() => {
-        axiosPublic(`/post/${id}`)
-            .then((res) => {
-                console.log(res.data)
-                setPost(res.data)
-                if (user) {
-                    setVoteFetching(true)
-                    axiosSecure(`/getVote/${id}`).then((res) => {
-                        // console.log(res.data)
-                        setVote(res.data)
-                        setVoteFetching(false)
-                    })
-                }
-            })
-            .catch((e) => {
-                console.log(e)
-            })
-    }, [axiosPublic, axiosSecure, id, reload, user])
+    const {
+        data: voteFc,
+        // refetch: voteRefetch,
+        isFetching: voteFetching,
+    } = useQuery({
+        queryKey: ["getVote"],
+        enabled: !!user && !!post,
+        queryFn: async () => {
+            const res = await axiosSecure(`/getVote/${_id}`)
+            setVote(res.data)
+            return res.data
+        },
+        initialData: {},
+    })
+
+    // useEffect(() => {
+    //     axiosPublic(`/post/${id}`)
+    //         .then((res) => {
+    //             console.log(res.data)
+    //             setPost(res.data)
+    //             if (user) {
+    //                 setVoteFetching(true)
+    //                 axiosSecure(`/getVote/${_id}`).then((res) => {
+    //                     // console.log(res.data)
+    //                     setVote(res.data)
+    //                     setVoteFetching(false)
+    //                 })
+    //             }
+    //         })
+    //         .catch((e) => {
+    //             console.log(e)
+    //         })
+    // }, [axiosPublic, axiosSecure, id, reload, user])
 
     const { data: comments, refetch: commentRefetch } = useQuery({
         queryKey: ["comments"],
-        enabled: !!user,
+        enabled: !!user && !!post,
         queryFn: async () => {
             const res = await axiosSecure(`/comments/${id}`)
             // console.log(res.data)
@@ -84,32 +99,8 @@ const PostDetails = () => {
     const { _id, tags, authorImage, authorName, postDescription, postTitle, postTime } = post
     const shareUrl = `${import.meta.env.VITE_API_URL}/post/${_id}`
     // ------------------------------------------------------------------------
-    // const {
-    //     data: voteFc,
-    //     refetch: voteRefetch,
-    //     isFetching: voteFetching,
-    // } = useQuery({
-    //     queryKey: ["getVote"],
-    //     enabled: !!user,
-    //     queryFn: async () => {
-    //         const res = await axiosSecure(`/getVote/${_id}`)
-    //         console.log(res.data)
-    //         return res.data
-    //     },
-    //     initialData: {},
-    // })
 
-    const [vote, setVote] = useState({})
-    // useEffect(() => {
-    //     if (post) {
-    //         setVoteFetching(true)
-    //         axiosSecure(`/getVote/${_id}`).then((res) => {
-    //             // console.log(res.data)
-    //             setVote(res.data)
-    //             setVoteFetching(false)
-    //         })
-    //     }
-    // }, [_id, axiosSecure, post, post._id])
+    const [vote, setVote] = useState(voteFc)
 
     console.log(vote)
 
@@ -129,13 +120,13 @@ const PostDetails = () => {
     // console.log(upToggle, downToggle)
     useEffect(() => {
         // setVoteFetching(true)
-        if (vote) {
-            setDownToggle(vote.downVote)
-            setUpToggle(vote.upVote)
-            setVote(vote)
+        if (voteFc) {
+            setDownToggle(voteFc.downVote)
+            setUpToggle(voteFc.upVote)
+            setVote(voteFc)
             // setVoteFetching(false)
         }
-    }, [vote])
+    }, [voteFc])
 
     // const { mutate } = useMutation({
     //     mutationKey: ["updateVotes"],
@@ -275,7 +266,7 @@ const PostDetails = () => {
         }
     }
 
-    if (voteFetching) {
+    if (voteFetching || isFetching) {
         return <SmallLoading />
     }
 
