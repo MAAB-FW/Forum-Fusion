@@ -52,21 +52,23 @@ const PostDetails = () => {
     // })
 
     useEffect(() => {
-        setVoteFetching(true)
         axiosPublic(`/post/${id}`)
             .then((res) => {
                 console.log(res.data)
                 setPost(res.data)
-                axiosSecure(`/getVote/${id}`).then((res) => {
-                    // console.log(res.data)
-                    setVote(res.data)
-                    setVoteFetching(false)
-                })
+                if (user) {
+                    setVoteFetching(true)
+                    axiosSecure(`/getVote/${id}`).then((res) => {
+                        // console.log(res.data)
+                        setVote(res.data)
+                        setVoteFetching(false)
+                    })
+                }
             })
             .catch((e) => {
                 console.log(e)
             })
-    }, [axiosPublic, axiosSecure, id, reload])
+    }, [axiosPublic, axiosSecure, id, reload, user])
 
     const { data: comments, refetch: commentRefetch } = useQuery({
         queryKey: ["comments"],
@@ -160,7 +162,6 @@ const PostDetails = () => {
     //             })
     //     },
     // })
-    console.log(vote)
 
     // const { mutate: mutateCount } = useMutation({
     //     mutationKey: ["updateVoteCount"],
