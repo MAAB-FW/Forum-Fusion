@@ -61,8 +61,17 @@ const Banner = ({ text, setText, searchOutput, setSearchOutput, handleSearch, ba
                         <div className="mt-2">
                             Popular Topics:{" "}
                             <span className="*:text-blue-500 *:bg-[#f3ebfe] *:rounded-xl *:px-2 *:my-1">
-                                <button className="">Helpdesk</button>, <button className="">Introduction</button>,{" "}
-                                <button className="">Payment</button>
+                                <button type="button" className="">
+                                    Helpdesk
+                                </button>
+                                ,{" "}
+                                <button type="button" className="">
+                                    Introduction
+                                </button>
+                                ,{" "}
+                                <button type="button" className="">
+                                    Payment
+                                </button>
                             </span>
                         </div>
                     </form>

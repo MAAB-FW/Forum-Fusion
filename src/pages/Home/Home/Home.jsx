@@ -4,6 +4,7 @@ import AllTags from "../AllTags/AllTags"
 import Announcement from "../Announcement/Announcement"
 import PostContainer from "../PostContainer/PostContainer"
 import useAxiosPublic from "@/hooks/useAxiosPublic"
+import { useMutation } from "@tanstack/react-query"
 
 const Home = () => {
     const [text, setText] = useState("")
@@ -12,16 +13,23 @@ const Home = () => {
     const [loading, setLoading] = useState(false)
     const axiosPublic = useAxiosPublic()
     const bannerRef = useRef(null)
+
+    const { mutate } = useMutation({
+        mutationKey: ["bannerSearch"],
+        mutationFn: (text) => {
+            setLoading(true)
+            axiosPublic(`/bannerSearch?q=${text}`).then((res) => {
+                setSearchOutput(res.data)
+                setLoading(false)
+            })
+        },
+    })
+
     const handleSearch = (e) => {
         e.preventDefault()
         setHide(false)
         if (text) {
-            setLoading(true)
-            axiosPublic(`/bannerSearch?q=${text}`).then((res) => {
-                console.log(res.data)
-                setSearchOutput(res.data)
-                setLoading(false)
-            })
+            mutate(text)
         }
     }
     return (
