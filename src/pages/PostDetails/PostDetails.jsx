@@ -53,7 +53,7 @@ const PostDetails = () => {
 
     const {
         data: voteFc,
-        // refetch: voteRefetch,
+        refetch: voteRefetch,
         isFetching: voteFetching,
     } = useQuery({
         queryKey: ["getVote"],
@@ -227,8 +227,8 @@ const PostDetails = () => {
                     console.log(res.data)
                     // // setReload(!reload)
                     if (res.data.result.upsertedId || res.data.result.insertedId) {
-                        // voteRefetch()
-                        // console.log(res.data.result)
+                        voteRefetch()
+                        console.log(res.data.result)
                     }
                     if (res.data.postVoteUpdate) {
                         // console.log(res.data.postVoteUpdate)
@@ -257,7 +257,8 @@ const PostDetails = () => {
                     console.log(res.data)
                     // // setReload(!reload)
                     if (res.data.upsertedId || res.data.insertedId) {
-                        // voteRefetch()
+                        voteRefetch()
+                        console.log(res.data.result);
                     }
                 })
                 .catch((e) => {
