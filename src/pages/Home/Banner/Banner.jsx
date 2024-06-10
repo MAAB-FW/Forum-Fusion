@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect } from "react"
 import SinglePost from "../PostContainer/SinglePost"
 import PropTypes from "prop-types"
+import { CgSpinnerTwo } from "react-icons/cg"
 
-const Banner = ({ text, setText, searchOutput, setSearchOutput, handleSearch, bannerRef }) => {
+const Banner = ({ text, setText, searchOutput, setSearchOutput, handleSearch, bannerRef, hide, setHide, loading }) => {
     const handleClear = useCallback(() => {
+        setHide(true)
         setSearchOutput([])
-    }, [setSearchOutput])
+    }, [setHide, setSearchOutput])
 
     useEffect(() => {
         const handleKey = (e) => {
@@ -64,7 +66,7 @@ const Banner = ({ text, setText, searchOutput, setSearchOutput, handleSearch, ba
                             </span>
                         </div>
                     </form>
-                    <div hidden={searchOutput.length === 0} className="shadow-2xl mt-5 px-4 md:px-12 py-5 rounded-3xl">
+                    <div hidden={hide} className="shadow-2xl mt-5 px-4 md:px-12 py-5 rounded-3xl">
                         <div className="flex justify-end">
                             <button
                                 onClick={handleClear}
@@ -74,9 +76,15 @@ const Banner = ({ text, setText, searchOutput, setSearchOutput, handleSearch, ba
                                 <span>Clear</span>
                             </button>
                         </div>
-                        {searchOutput?.map((post) => (
-                            <SinglePost key={post._id} post={post}></SinglePost>
-                        ))}
+                        {loading ? (
+                            <CgSpinnerTwo className="animate-spin text-4xl flex items-center justify-center w-full my-8" />
+                        ) : searchOutput.length < 1 ? (
+                            <div className="my-8 text-xl">
+                                <p>Results Empty</p>
+                            </div>
+                        ) : (
+                            searchOutput?.map((post) => <SinglePost key={post._id} post={post}></SinglePost>)
+                        )}
                     </div>
 
                     {/* <div className="mt-10">
@@ -141,4 +149,7 @@ Banner.propTypes = {
     setSearchOutput: PropTypes.func,
     handleSearch: PropTypes.func,
     bannerRef: PropTypes.object,
+    hide: PropTypes.bool,
+    setHide: PropTypes.func,
+    loading: PropTypes.bool,
 }

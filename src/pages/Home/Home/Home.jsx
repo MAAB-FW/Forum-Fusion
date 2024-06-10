@@ -7,15 +7,20 @@ import useAxiosPublic from "@/hooks/useAxiosPublic"
 
 const Home = () => {
     const [text, setText] = useState("")
+    const [hide, setHide] = useState(true)
     const [searchOutput, setSearchOutput] = useState([])
+    const [loading, setLoading] = useState(false)
     const axiosPublic = useAxiosPublic()
     const bannerRef = useRef(null)
     const handleSearch = (e) => {
         e.preventDefault()
+        setHide(false)
         if (text) {
+            setLoading(true)
             axiosPublic(`/bannerSearch?q=${text}`).then((res) => {
                 console.log(res.data)
                 setSearchOutput(res.data)
+                setLoading(false)
             })
         }
     }
@@ -28,6 +33,9 @@ const Home = () => {
                 setSearchOutput={setSearchOutput}
                 handleSearch={handleSearch}
                 bannerRef={bannerRef}
+                hide={hide}
+                setHide={setHide}
+                loading={loading}
             ></Banner>
             <AllTags setText={setText} bannerRef={bannerRef}></AllTags>
             <Announcement></Announcement>

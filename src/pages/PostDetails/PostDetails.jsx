@@ -1,6 +1,6 @@
 import SmallLoading from "@/components/SmallLoading"
 import useAxiosPublic from "@/hooks/useAxiosPublic"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { LinkedinIcon } from "lucide-react"
 import React, { useEffect, useState } from "react"
 import { FaArrowDown, FaArrowUp, FaComment, FaShare } from "react-icons/fa"
