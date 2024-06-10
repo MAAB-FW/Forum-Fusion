@@ -97,7 +97,7 @@ const PostDetails = () => {
     })
 
     const { _id, tags, authorImage, authorName, postDescription, postTitle, postTime } = post
-    const shareUrl = `${import.meta.env.VITE_API_URL}/post/${_id}`
+    const shareUrl = `https://maab-fw-assignment-12.vercel.app/post/${_id}`
     // ------------------------------------------------------------------------
 
     const [vote, setVote] = useState(voteFc)
@@ -258,7 +258,7 @@ const PostDetails = () => {
                     // // setReload(!reload)
                     if (res.data.upsertedId || res.data.insertedId) {
                         voteRefetch()
-                        console.log(res.data.result);
+                        console.log(res.data.result)
                     }
                 })
                 .catch((e) => {
