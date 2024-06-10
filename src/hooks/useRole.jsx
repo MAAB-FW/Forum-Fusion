@@ -8,7 +8,7 @@ export const useRole = () => {
 
     const { data: role, isPending } = useQuery({
         queryKey: ["role", user],
-        enabled: !loading,
+        enabled: !loading && !!user,
         queryFn: async () => {
             const res = await axiosSecure.get(`/role/${user.email}`)
             // console.log(res.data.role)
