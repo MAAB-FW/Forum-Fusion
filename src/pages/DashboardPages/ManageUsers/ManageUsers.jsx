@@ -24,16 +24,16 @@ const ManageUsers = () => {
     const [currentPage, setCurrentPage] = useState(0)
     const itemPerPage = 5
     const { data, isFetching: isFetching2 } = useQuery({
-        queryKey: ["totalData"],
+        queryKey: ["totalData", search],
         queryFn: async () => {
-            const res = await axiosSecure(`/totalData`)
+            const res = await axiosSecure(`/totalData?search=${search}`)
             // console.log(res.data)
             return res.data
         },
         initialData: {},
     })
     const { totalUsers: count } = data
-console.log(data);
+    console.log(data)
     const {
         data: users,
         refetch,
