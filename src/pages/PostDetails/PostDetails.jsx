@@ -38,7 +38,7 @@ const PostDetails = () => {
     const [isCommentOpen, setIsCommentOpen] = useState(false)
     // const [voteFetching, setVoteFetching] = useState(false)
     // const [post, setPost] = useState({})
-    const [reload, setReload] = useState(false)
+    // const [reload, setReload] = useState(false)
     // const [isFetching, setIsFetching] = useState(true)
 
     const { data: post, isFetching } = useQuery({
@@ -59,7 +59,7 @@ const PostDetails = () => {
         queryKey: ["getVote"],
         enabled: !!user && !!post,
         queryFn: async () => {
-            const res = await axiosSecure(`/getVote/${_id}`)
+            const res = await axiosSecure(`/getVote/${id}`)
             setVote(res.data)
             return res.data
         },
@@ -225,7 +225,7 @@ const PostDetails = () => {
                 .put("/updateVotes", voteData)
                 .then((res) => {
                     console.log(res.data)
-                    setReload(!reload)
+                    // // setReload(!reload)
                     if (res.data.result.upsertedId || res.data.result.insertedId) {
                         // voteRefetch()
                         // console.log(res.data.result)
@@ -255,7 +255,7 @@ const PostDetails = () => {
                 .put("/updateVotes", voteData)
                 .then((res) => {
                     console.log(res.data)
-                    setReload(!reload)
+                    // // setReload(!reload)
                     if (res.data.upsertedId || res.data.insertedId) {
                         // voteRefetch()
                     }
