@@ -2,7 +2,7 @@
 
 **admin username:** <pre>`a@b.com`</pre>
 
-**admin password:** <pre>`BBbb22!!`</pre>
+**admin password:** <pre>`********`</pre>
 
 ## Website Live Link:
 
