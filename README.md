@@ -17,8 +17,8 @@
 ## Website Features:
 
 - In this forum website, anyone can read any post. But can't read or write comments, participate in vote and share without logged in.
-- After logged in this website, users achieve "Bronze" Badge by default. So that they can post up to 5 posts in this website and write unlimited comments as they wants. If the users want to posts unlimited times they have to be a "Gold" Badge Member. For "Gold" Badge, they have to pay 20$ in membership payment page.
-- An Admin can check how many total posts, total comments and total users have in this website. Also there are a pie chart below with that information. Admin can add tags from this page which tags can be select when a user post anything is this forum website etc.
+- After logged in this website, users achieve "Bronze" Badge by default. So that they can post up to 5 posts in this website and write unlimited comments as they wants.
+- If the users want to posts unlimited times they have to be a "Gold" Badge Member. For "Gold" Badge, they have to pay 20$ in membership payment page.
 
 <!-- 
 1. In this forum website, anyone can read any post. But can't read or write comments, participate in vote and share without logged in.
