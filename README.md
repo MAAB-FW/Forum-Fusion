@@ -1,5 +1,8 @@
 # Forum Fusion
 
+### Forum Fusion is an online platform where people can hold conversations in the form of posted messages.
+<hr>
+
 **admin username:** <pre>`a@b.com`</pre>
 
 **admin password:** <pre>`********`</pre>
