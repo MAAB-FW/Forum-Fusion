@@ -1,10 +1,4 @@
 import SmallLoading from "@/components/SmallLoading"
-import useAxiosPublic from "@/hooks/useAxiosPublic"
-import { useQuery } from "@tanstack/react-query"
-import { LinkedinIcon } from "lucide-react"
-import React, { useEffect, useState } from "react"
-import { FaArrowDown, FaArrowUp, FaComment, FaShare } from "react-icons/fa"
-import { Link, useLocation, useParams } from "react-router-dom"
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -15,6 +9,15 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import useAuth from "@/hooks/useAuth"
+import useAxiosPublic from "@/hooks/useAxiosPublic"
+import useAxiosSecure from "@/hooks/useAxiosSecure"
+import { useQuery } from "@tanstack/react-query"
+import { LinkedinIcon } from "lucide-react"
+import { useEffect, useState } from "react"
+import { CgSpinner } from "react-icons/cg"
+import { FaArrowDown, FaArrowUp, FaComment, FaShare } from "react-icons/fa"
+import { Link, useLocation, useParams } from "react-router-dom"
 import {
     FacebookIcon,
     FacebookShareButton,
@@ -24,9 +27,6 @@ import {
     WhatsappIcon,
     WhatsappShareButton,
 } from "react-share"
-import useAuth from "@/hooks/useAuth"
-import useAxiosSecure from "@/hooks/useAxiosSecure"
-import { CgSpinner } from "react-icons/cg"
 
 const PostDetails = () => {
     const { id } = useParams()
@@ -39,22 +39,21 @@ const PostDetails = () => {
     // const [voteFetching, setVoteFetching] = useState(false)
     // const [post, setPost] = useState({})
     // const [reload, setReload] = useState(false)
-    // const [isFetching, setIsFetching] = useState(true)
 
-    const { data: post, isFetching } = useQuery({
+    const { data: post = {}, isLoading } = useQuery({
         queryKey: ["post"],
         queryFn: async () => {
             const res = await axiosPublic(`/post/${id}`)
             // console.log(res.data)
             return res.data
         },
-        initialData: {},
+        // initialData: {},
     })
 
     const {
-        data: voteFc,
+        data: voteFc = {},
         // refetch: voteRefetch,
-        isFetching: voteFetching,
+        isLoading: voteFetching,
     } = useQuery({
         queryKey: ["getVote"],
         enabled: !!user && !!post,
@@ -63,7 +62,7 @@ const PostDetails = () => {
             setVote(res.data)
             return res.data
         },
-        initialData: {},
+        // initialData: {},
     })
 
     // useEffect(() => {
@@ -85,7 +84,7 @@ const PostDetails = () => {
     //         })
     // }, [axiosPublic, axiosSecure, id, reload, user])
 
-    const { data: comments, refetch: commentRefetch } = useQuery({
+    const { data: comments = [], refetch: commentRefetch } = useQuery({
         queryKey: ["comments"],
         enabled: !!user && !!post,
         queryFn: async () => {
@@ -93,7 +92,7 @@ const PostDetails = () => {
             // console.log(res.data)
             return res.data
         },
-        initialData: [],
+        // initialData: [],
     })
 
     const { _id, tags, authorImage, authorName, postDescription, postTitle, postTime } = post
@@ -102,7 +101,7 @@ const PostDetails = () => {
 
     const [vote, setVote] = useState(voteFc)
 
-    console.log(vote)
+    // console.log(vote)
 
     // useEffect(() => {
     //     if (user && post._id) {
@@ -266,8 +265,8 @@ const PostDetails = () => {
                 })
         }
     }
-
-    if (voteFetching || isFetching) {
+    console.log(voteFetching, isLoading)
+    if (voteFetching || isLoading) {
         return <SmallLoading />
     }
 
