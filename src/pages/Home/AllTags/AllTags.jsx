@@ -6,14 +6,14 @@ import PropTypes from "prop-types"
 
 const AllTags = ({ setText, bannerRef }) => {
     const axiosPublic = useAxiosPublic()
-    const { data } = useQuery({
+    const { data = [] } = useQuery({
         queryKey: ["tags"],
         queryFn: async () => {
             const res = await axiosPublic("/tags")
             // console.log(res.data)
             return res.data
         },
-        initialData: [],
+        // initialData: [],
     })
     return (
         <div>

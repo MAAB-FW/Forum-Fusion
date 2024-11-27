@@ -18,14 +18,14 @@ const AddPost = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const [posting, setPosting] = useState(false)
-    const { data: tags } = useQuery({
+    const { data: tags = [] } = useQuery({
         queryKey: ["tags"],
         queryFn: async () => {
             const res = await axiosPublic("/tags")
             // console.log(res.data)
             return res.data
         },
-        initialData: [],
+        // initialData: [],
     })
 
     const fetchItem = ["myProfile", "myPosts"]
@@ -40,7 +40,7 @@ const AddPost = () => {
         })),
     })
 
-    const isFetching = results.some((result) => result.isFetching)
+    const isLoading = results.some((result) => result.isLoading)
 
     const myProfile = results[0].data
     const myPosts = results[1].data
@@ -77,7 +77,7 @@ const AddPost = () => {
         }
     }
 
-    if (isFetching) {
+    if (isLoading) {
         return <SmallLoading />
     }
 

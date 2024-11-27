@@ -22,13 +22,13 @@ const Navbar = () => {
     const { role } = useRole()
 
     const axiosPublic = useAxiosPublic()
-    const { data: announcements } = useQuery({
+    const { data: announcements = [] } = useQuery({
         queryKey: ["announcement"],
         queryFn: async () => {
             const res = await axiosPublic("/announcements")
             return res.data
         },
-        initialData: [],
+        // initialData: [],
     })
 
     const handleLogout = () => {
