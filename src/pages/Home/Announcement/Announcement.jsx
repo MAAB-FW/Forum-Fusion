@@ -7,16 +7,16 @@ import { HiSpeakerphone } from "react-icons/hi"
 
 const Announcement = () => {
     const axiosPublic = useAxiosPublic()
-    const { data, isFetching } = useQuery({
+    const { data = [], isLoading } = useQuery({
         queryKey: ["announcement"],
         queryFn: async () => {
             const res = await axiosPublic("/announcements")
             return res.data
         },
-        initialData: [],
+        // initialData: [],
     })
     if (data.length === 0) return
-    if (isFetching) {
+    if (isLoading) {
         return <SmallLoading></SmallLoading>
     }
     return (

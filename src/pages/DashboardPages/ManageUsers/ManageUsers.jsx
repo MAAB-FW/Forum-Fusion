@@ -23,21 +23,21 @@ const ManageUsers = () => {
     const [search, setSearch] = useState("")
     const [currentPage, setCurrentPage] = useState(0)
     const itemPerPage = 5
-    const { data, isFetching: isFetching2 } = useQuery({
+    const { data = {}, isLoading: isLoading2 } = useQuery({
         queryKey: ["totalData", search],
         queryFn: async () => {
             const res = await axiosSecure(`/totalData?search=${search}`)
             // console.log(res.data)
             return res.data
         },
-        initialData: {},
+        // initialData: {},
     })
     const { totalUsers: count } = data
     console.log(data)
     const {
-        data: users,
+        data: users = [],
         refetch,
-        isFetching,
+        isLoading,
     } = useQuery({
         queryKey: ["manageUsers", search, currentPage],
         enabled: !!data,
@@ -45,7 +45,7 @@ const ManageUsers = () => {
             const res = await axiosSecure(`/manageUsers?search=${search}&size=${itemPerPage}&page=${currentPage}`)
             return res.data
         },
-        initialData: [],
+        // initialData: [],
     })
     // console.log(users)
 
@@ -127,7 +127,7 @@ const ManageUsers = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {isFetching || isFetching2 ? (
+                    {isLoading || isLoading2 ? (
                         <TableRow>
                             <TableCell colSpan="4" className="">
                                 <SmallLoading></SmallLoading>

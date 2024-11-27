@@ -14,14 +14,14 @@ const AdminProfile = () => {
     const [tag, setTag] = useState("")
     const axiosSecure = useAxiosSecure()
 
-    const { data: totalData, isFetching } = useQuery({
+    const { data: totalData = {}, isLoading } = useQuery({
         queryKey: ["totalData"],
         queryFn: async () => {
             const res = await axiosSecure("/totalData")
             console.log(res.data)
             return res.data
         },
-        initialData: {},
+        // initialData: {},
     })
     //TODO: dynamic data
     const data = [
@@ -62,7 +62,7 @@ const AdminProfile = () => {
         }
     }
 
-    if (isFetching) {
+    if (isLoading) {
         return <SmallLoading />
     }
 

@@ -12,28 +12,28 @@ const PostContainer = () => {
     const itemPerPage = 5
     const [popularity, setPopularity] = useState(false)
 
-    const { data, isFetching: isFetching2 } = useQuery({
+    const { data = {}, isLoading: isLoading2 } = useQuery({
         queryKey: ["postsCount"],
         queryFn: async () => {
             const res = await axiosPublic("/postsCount")
             // console.log(res.data)
             return res.data
         },
-        initialData: {},
+        // initialData: {},
     })
-    const { count } = data
+    const { count = 0 } = data
 
-    const { data: posts, isFetching } = useQuery({
+    const { data: posts = [], isLoading } = useQuery({
         queryKey: ["posts", currentPage, popularity],
         queryFn: async () => {
             const res = await axiosPublic(`/posts?size=${itemPerPage}&page=${currentPage}&popularity=${popularity}`)
             // console.log(res.data)
             return res.data
         },
-        initialData: [],
+        // initialData: [],
     })
 
-    if (isFetching || isFetching2) {
+    if (isLoading || isLoading2) {
         return <SmallLoading />
     }
 

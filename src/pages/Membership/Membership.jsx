@@ -14,17 +14,17 @@ const Membership = () => {
     const paymentFee = 20
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure()
-    const { data, isFetching, refetch } = useQuery({
+    const { data = {}, isLoading, refetch } = useQuery({
         queryKey: ["myProfile"],
         queryFn: async () => {
             const res = await axiosSecure(`/myProfile/${user.email}`)
             console.log(res.data)
             return res.data
         },
-        initialData: [],
+        // initialData: [],
     })
 
-    if (isFetching) return <SmallLoading />
+    if (isLoading) return <SmallLoading />
 
     return (
         <div className="flex items-center justify-center py-20">
